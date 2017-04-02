@@ -49,7 +49,7 @@ Deze app heeft geen eigen interactie, maar toont, real-time:
 
 
 # Schermontwerpen
-Alle schermontwerpen van de client-side applicaties zijn [hier](https://github.com/jeffreyhaen/ICA-Kwizzert-api/tree/master/wireframes) te vinden.
+Alle schermontwerpen van de client-side applicaties zijn [hier](https://github.com/jeffreyhaen/ICA-Kwizzert/tree/master/assignment/mockups) te vinden.
 
 
 # Architectuur
@@ -332,7 +332,7 @@ RateTeamAnswer
 
 
 # Mappenstructuur
-Om een indicatie te geven van de mappenstructuur die gebruikt wordt om het systeem te realiseren, wordt hieronder een voorbeeld getoond. Het gehele systeem wordt in één repository ontwikkelt. De clients en de server maken gebruik van een Data Access Layer (DAL). Deze laag bevat de eerder genoemde [modellen](#modellen-en-data-structuur) en het [communicatie protocol](#communicatie-protocol). Hiermee maken we het mogelijk om één keer de modellen en het communicatie protocol te definiëren en deze vervolgens in de server en in de clients te importeren.
+Om een indicatie te geven van de mappenstructuur die gebruikt wordt om het systeem te realiseren, wordt hieronder een voorbeeld getoond. Het gehele systeem wordt in één repository ontwikkelt. De clients en de server maken gebruik van een Data Access Layer (DAL). Deze laag bevat de eerder genoemde database [modellen](#modellen-en-data-structuur) en het [communicatie protocol](#communicatie-protocol). Hiermee maken we het mogelijk om één keer de modellen en het communicatie protocol te definiëren en deze vervolgens in de server en in de clients te importeren.
 
 ```
 server/

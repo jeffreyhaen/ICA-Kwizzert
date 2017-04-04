@@ -1,10 +1,14 @@
 
-module.exports.ResponseTeamGameInformation = {
-    Type: "ResponseTeamGameInformation",
-    Team: Team,
-    Question: Question,
-    CurrentRound: Number,
-    MaximumRounds: Number,
-    Rank: Number,
-    PointsNeededForRankUp: Number,
-};
+class ResponseTeamGameInformation {
+    constructor(teamId, questionId, currentRound, maximumRounds, rank, pointsNeededForRankUp) {
+        this.type = "ResponseTeamGameInformation";
+        this.teamId = teamId;
+        this.questionId = questionId;
+        this.currentRound = currentRound;
+        this.maximumRounds = maximumRounds;
+        this.rank = rank;
+        this.pointsNeededForRankUp = pointsNeededForRankUp;
+    }
+}
+
+module.exports = ResponseTeamGameInformation;

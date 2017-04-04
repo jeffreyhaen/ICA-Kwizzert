@@ -1,6 +1,9 @@
 
+class RegisterClient {
+    constructor(clientType) {
+        this.type = "RegisterClient";
+        this.clientType = clientType;
+    }
+}
 
-module.exports.RegisterClient = {
-    Type: "RegisterClient",
-    ClientType: String,
-};
+module.exports = RegisterClient;

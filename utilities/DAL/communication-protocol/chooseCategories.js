@@ -1,6 +1,10 @@
 
-module.exports.ChooseCategories = {
-    Type: "ChooseCategories",
-    Game: Game, // ref game?
-    Categories: [], // length default 3
-};
+class ChooseCategories {
+    constructor(gameId, categoryIds) {
+        this.type = "ChooseCategories";
+        this.gameId = gameId;
+        this.categoryIds = categoryIds;
+    }
+}
+
+module.exports = ChooseCategories;

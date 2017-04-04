@@ -1,5 +1,9 @@
 
-module.exports.GameStart = {
-    Type: "GameStart",
-    Game: Game,
-};
+class GameStart {
+    constructor(gameId) {
+        this.type = "GameStart";
+        this.gameId = gameId;
+    }
+}
+
+module.exports = GameStart;

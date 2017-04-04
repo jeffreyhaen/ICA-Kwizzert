@@ -1,3 +1,5 @@
+'use strict'
+
 var app = require('express');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -11,27 +13,29 @@ server.listen(3000);
     // whaever
 });*/
 
-var lijst = {
-    RegisterClient: onRegisterClient,
-};
+// var lijst = {
+//     RegisterClient: onRegisterClient,
+// };
 
-var games = [
-    {
-        gameId: "Game 1",
-        teams: [{ type: "scoreboard", socket: SOCKET }, { type: "team", socket: SOCKET }]
-    }
-];
+// var games = [
+//     {
+//         gameId: "Game 1",
+//         teams: [{ type: "scoreboard", socket: SOCKET }, { type: "team", socket: SOCKET }]
+//     }
+// ];
 
-var clients = [
-    { type: "scoreboard", socket: MOCKET }
-]
+// var clients = [
+//     { type: "scoreboard", socket: MOCKET }
+// ]
+
+var test = new RegisterClient();
+test.ClientType = "TEST"
+console.log(test.ClientType);
 
 io.on('connection', (client) => {
     client.on(RegisterClient.Type, function(data) {
         onRegisterClient(socket, data); 
     });
-
-
 });
 
 function onRegisterClient(socket, message) {
@@ -51,7 +55,3 @@ function onRegisterTeam(socket, message) {
 function onChooseCategories(from ,message) {
 
 }
-
-
-
-//theExpressApp.use(express.static(path.join(__dirname, 'client-side')));

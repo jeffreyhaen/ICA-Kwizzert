@@ -1,7 +1,11 @@
 
-module.exports.RoundStart = {
-    Type: "RoundStart",
-    Game: Game,
-    Questions: [], // length default 12
-    MaximumThinkingTime: Number, // seconds
-};
+class RoundStart {
+    constructor(gameId, questionIds, maximumThinkingTime) {
+        this.type = "RoundStart";
+        this.gameId = gameId;
+        this.questionIds = questionIds;
+        this.maximumThinkingTime = maximumThinkingTime;
+    }
+}
+
+module.exports = RoundStart;

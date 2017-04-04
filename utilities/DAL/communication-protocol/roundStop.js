@@ -1,6 +1,10 @@
 
-module.exports.RoundStop = {
-    Type: "RoundStop",
-    Game: Game,
-    Round: Round,
-};
+class RoundStop {
+    constructor(gameId, roundId) {
+        this.type = "RoundStop";
+        this.gameId = gameId;
+        this.roundId = roundId;
+    }
+}
+
+module.exports = RoundStop;

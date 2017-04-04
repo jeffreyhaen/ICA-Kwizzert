@@ -1,6 +1,10 @@
 
-module.exports.RegisterTeam = {
-    Type: "RegisterTeam",
-    Game: Game,
-    Name: String,
-};
+class RegisterTeam {
+    constructor(gameId, name) {
+        this.type = "RegisterTeam";
+        this.gameId = gameId;
+        this.name = name;
+    }
+}
+
+module.exports = RegisterTeam;

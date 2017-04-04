@@ -1,15 +1,13 @@
-global.ChooseCategories = require("./chooseCategories.js").ChooseCategories;
-global.GameInformation = require("./gameInformation.js").GameInformation;
-global.GameStart = require("./gameStart.js").GameStart;
-global.GameStop = require("./gameStop.js").GameStop;
-global.InitializeGame = require("./initializeGame.js").InitializeGame;
-global.QuestionSelect = require("./questionSelect.js").QuestionSelect;
-global.RateTeamAnswer = require("./rateTeamAnswer.js").RateTeamAnswer;
-global.RateTeamRegistration = require("./rateTeamRegistration.js").RateTeamRegistration;
-global.RegisterAnswer = require("./registerAnswer.js").RegisterAnswer;
-global.RegisterClient = require("./registerClient.js").RegisterClient;
-global.RegisterTeam = require("./registerTeam.js").RegisterTeam;
-global.RequestTeamGameInformation = require("./requestTeamGameInformation.js").RequestTeamGameInformation;
-global.ResponseTeamGameInformation = require("./responseTeamGameInformation.js").ResponseTeamGameInformation;
-global.RoundStart = require("./roundStart.js").RoundStart;
-global.RoundStop = require("./roundStop.js").RoundStop;
+
+// Load `*.js` under current directory as properties
+//  i.e., `User.js` will become `exports['User']` or `exports.User`
+require('fs').readdirSync(__dirname + '/').forEach(function(file) {
+  if (file.match(/\.js$/) !== null && file !== 'index.js') {
+    var name = capitalizeFirstLetter(file.replace('.js', ''));
+    global[name] = require('./' + file);
+  }
+});
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}

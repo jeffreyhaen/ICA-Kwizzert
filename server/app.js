@@ -7,8 +7,8 @@ var path    = require('path');
 
 require('../utilities/DAL/communication-protocol');
 
-server.listen(3000, function() {
-    console.log("Kwizzert server listening on port 3000!");
+server.listen(3001, function() {
+    console.log("Kwizzert server listening on port 3001!");
 });
 
 /*app.get('/', (request, response) => {

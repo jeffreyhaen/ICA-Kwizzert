@@ -1,5 +1,5 @@
 
 export default InitializeGame = {
-    Type: String,
+    Type: "InitializeGame",
     MaximumRounds: Number,
 };

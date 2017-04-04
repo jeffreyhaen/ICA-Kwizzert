@@ -1,5 +1,4 @@
-
-export default RegisterClient = {
-    Type: String,
+module.exports.RegisterClient = {
+    Type: "RegisterClient",
     ClientType: String,
 };

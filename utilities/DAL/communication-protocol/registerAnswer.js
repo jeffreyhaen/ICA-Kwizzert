@@ -1,6 +1,6 @@
 
 export default RegisterAnswer = {
-    Type: String,
+    Type: "RegisterAnswer",
     Game: Game,
     Team: Team,
     Question: Question,

@@ -1,18 +1,57 @@
-var express = require('express');
-var http    = require('http');
+var app = require('express');
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 var path    = require('path');
-////var ws      = require('ws'); // TODO: Implement Socket.io.
 
-var theExpressApp      = express();
-var theHttpServer      = http.createServer();
-//// var theWebSocketServer = new ws.Server({
-////                             server: theHttpServer
-////                          });
+require('../utilities/DAL/communication-protocol');
 
-theExpressApp.use(express.static(path.join(__dirname, 'client-side')));
+server.listen(3000);
+
+/*app.get('/', (request, response) => {
+    // whaever
+});*/
+
+var lijst = {
+    RegisterClient: onRegisterClient,
+};
+
+var games = [
+    {
+        gameId: "Game 1",
+        teams: [{ type: "scoreboard", socket: SOCKET }, { type: "team", socket: SOCKET }]
+    }
+];
+
+var clients = [
+    { type: "scoreboard", socket: MOCKET }
+]
+
+io.on('connection', (client) => {
+    client.on(RegisterClient.Type, function(data) {
+        onRegisterClient(socket, data); 
+    });
 
 
-theHttpServer.on('request', theExpressApp);
-theHttpServer.listen(3000, function() {
-    console.log("The Server is lisening on port 3000.")
 });
+
+function onRegisterClient(socket, message) {
+    console.log(from);
+}
+
+function onRegisterTeam(socket, message) {
+    if(socket == clients.first(socket && type == "team")) {
+        if (game.in(message.gameId))
+        {
+            
+        }
+    }
+}
+
+
+function onChooseCategories(from ,message) {
+
+}
+
+
+
+//theExpressApp.use(express.static(path.join(__dirname, 'client-side')));

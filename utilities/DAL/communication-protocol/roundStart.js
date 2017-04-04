@@ -1,6 +1,6 @@
 
 export default RoundStart = {
-    Type: String,
+    Type: "RoundStart",
     Game: Game,
     Questions: [], // length default 12
     MaximumThinkingTime: Number, // seconds

@@ -1,5 +1,5 @@
 
 export default GameStart = {
-    Type: String,
+    Type: "GameStart",
     Game: Game,
 };

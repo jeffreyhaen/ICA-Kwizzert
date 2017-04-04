@@ -1,6 +1,6 @@
 
 export default RequestTeamGameInformation = {
-    Type: String,
+    Type: "RequestTeamGameInformation",
     Game: Game,
     Team: Team,
 };

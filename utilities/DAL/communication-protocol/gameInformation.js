@@ -1,6 +1,6 @@
 
 export default GameInformation = {
-    Type: String,
+    Type: "GameInformation",
     Game: Game,
     TeamsInformation: [],
     Timeleft: Number, // seconds

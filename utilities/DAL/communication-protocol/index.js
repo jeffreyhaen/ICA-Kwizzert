@@ -1,0 +1,1 @@
+global.RegisterClient = require("./registerClient.js").RegisterClient;

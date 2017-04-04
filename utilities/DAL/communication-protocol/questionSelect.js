@@ -1,6 +1,6 @@
 
 export default QuestionSelect = {
-    Type: String,
+    Type: "QuestionSelect",
     Game: Game,
     Round: Round,
     Question: Question,

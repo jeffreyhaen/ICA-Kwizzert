@@ -1,5 +1,5 @@
 
 export default GameStop = {
-    Type: String,
+    Type: "GameStop",
     Game: Game,
 };

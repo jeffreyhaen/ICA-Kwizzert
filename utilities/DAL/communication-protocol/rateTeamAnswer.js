@@ -1,6 +1,6 @@
 
 export default RateTeamAnswer = {
-    Type: String,
+    Type: "RateTeamAnswer",
     Game: Game,
     Team: Team,
     Question: Question,

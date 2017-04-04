@@ -1,6 +1,6 @@
 
 export default RateTeamRegistration = {   
-    Type: String,
+    Type: "RateTeamRegistration",
     Game: Game,
     Team: Team,
     Accepted: Boolean,

@@ -1,6 +1,6 @@
 
 export default RegisterTeam = {
-    Type: String,
+    Type: "RegisterTeam",
     Game: Game,
     Name: String,
 };

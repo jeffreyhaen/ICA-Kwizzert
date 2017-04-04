@@ -1,6 +1,6 @@
 
 export default ResponseTeamGameInformation = {
-    Type: String,
+    Type: "ResponseTeamGameInformation",
     Team: Team,
     Question: Question,
     CurrentRound: Number,

@@ -1,6 +1,6 @@
 
 export default ChooseCategories = {
-    Type: String,
+    Type: "ChooseCategories",
     Game: Game,
     Categories: [], // length default 3
 };

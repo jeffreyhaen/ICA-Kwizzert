@@ -1,6 +1,6 @@
 
 export default RoundStop = {
-    Type: String,
+    Type: "RoundStop",
     Game: Game,
     Round: Round,
 };

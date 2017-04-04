@@ -1,7 +1,7 @@
 
-export default GameInformation = {
+module.exports.GameInformation = {
     Type: "GameInformation",
-    Game: Game,
+    Game: Game, // ref game
     TeamsInformation: [],
     Timeleft: Number, // seconds
 };

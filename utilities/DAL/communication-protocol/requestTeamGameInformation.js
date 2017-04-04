@@ -1,6 +1,6 @@
 
-export default RequestTeamGameInformation = {
+module.exports.RequestTeamGameInformation = {
     Type: "RequestTeamGameInformation",
-    Game: Game,
-    Team: Team,
+    Game: Game, // ref game?
+    Team: Team, // ref team?
 };

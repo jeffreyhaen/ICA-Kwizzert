@@ -1,5 +1,5 @@
 
-export default GameStart = {
+module.exports.GameStart = {
     Type: "GameStart",
     Game: Game,
 };

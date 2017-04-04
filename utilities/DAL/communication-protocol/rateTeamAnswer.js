@@ -1,5 +1,5 @@
 
-export default RateTeamAnswer = {
+module.exports.RateTeamAnswer = {
     Type: "RateTeamAnswer",
     Game: Game,
     Team: Team,

@@ -1,5 +1,5 @@
 
-export default ResponseTeamGameInformation = {
+module.exports.ResponseTeamGameInformation = {
     Type: "ResponseTeamGameInformation",
     Team: Team,
     Question: Question,

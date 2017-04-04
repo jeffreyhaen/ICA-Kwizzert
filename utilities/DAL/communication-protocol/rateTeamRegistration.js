@@ -1,5 +1,5 @@
 
-export default RateTeamRegistration = {   
+module.exports.RateTeamRegistration = {   
     Type: "RateTeamRegistration",
     Game: Game,
     Team: Team,

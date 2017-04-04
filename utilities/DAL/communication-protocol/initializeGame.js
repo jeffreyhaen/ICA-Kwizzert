@@ -1,5 +1,5 @@
 
-export default InitializeGame = {
+module.exports.InitializeGame = {
     Type: "InitializeGame",
     MaximumRounds: Number,
 };

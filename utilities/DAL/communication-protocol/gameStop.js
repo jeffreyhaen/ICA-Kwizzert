@@ -1,5 +1,5 @@
 
-export default GameStop = {
+module.exports.GameStop = {
     Type: "GameStop",
     Game: Game,
 };

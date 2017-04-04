@@ -1,5 +1,5 @@
 
-export default RegisterAnswer = {
+module.exports.RegisterAnswer = {
     Type: "RegisterAnswer",
     Game: Game,
     Team: Team,

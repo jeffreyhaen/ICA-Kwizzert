@@ -1,5 +1,5 @@
 
-export default RoundStart = {
+module.exports.RoundStart = {
     Type: "RoundStart",
     Game: Game,
     Questions: [], // length default 12

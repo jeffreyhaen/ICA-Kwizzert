@@ -1,5 +1,5 @@
 
-export default QuestionSelect = {
+module.exports.QuestionSelect = {
     Type: "QuestionSelect",
     Game: Game,
     Round: Round,

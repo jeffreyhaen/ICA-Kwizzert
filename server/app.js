@@ -5,24 +5,17 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var path    = require('path');
 
+var Game = require('../utilities/DAL/models/game');
+
 var RegisterClient = require('../utilities/DAL/communication-protocol/registerClient');
 var RegisterTeam = require('../utilities/DAL/communication-protocol/registerTeam');
-var InitializeGame = require('../utilities/DAL/communication-protocol/initializeGame');
+var CreateGame = require('../utilities/DAL/communication-protocol/createGame');
 var RequestGameList = require('../utilities/DAL/communication-protocol/requestGameList');
 var ResponseGameList = require('../utilities/DAL/communication-protocol/responseGameList');
-
 
 server.listen(3001, function() {
     console.log("Kwizzert server listening on port 3001!");
 });
-
-/*app.get('/', (request, response) => {
-    // whaever
-});*/
-
-// var lijst = {
-//     RegisterClient: onRegisterClient,
-// };
 
 // var games = [
 //     {
@@ -34,11 +27,12 @@ server.listen(3001, function() {
 var events = [
     { type: new RegisterClient().type, handler: onRegisterClient },
     { type: new RegisterTeam().type, handler: onRegisterTeam },
-    { type: new InitializeGame().type, handler: onInitializeGame },
+    { type: new CreateGame().type, handler: onCreateGame },
     { type: new RequestGameList().type, handler: onRequestGameList },
 ];
 
-var clients = []; // { socket: mySocket, clientType: myClientType } // See model RegisterClient.
+var games = [];     // See model Game. Example: { name: "Gametest 1", rounds: [], teams: [] }.
+var clients = [];   // See communication-protocol RegisterClient. Example: { socket: mySocket, clientType: myClientType }.
 
 io.on('connection', (client) => {
     events.forEach((event, index) => {
@@ -70,14 +64,15 @@ function onRegisterTeam(socket, data) {
     // }
 }
 
-/* Uses model InitializeGame */
-function onInitializeGame(socket, data) {
-
+/* Uses model CreateGame */
+function onCreateGame(socket, data) {
+    let newGame = new Game(data.name);
+    games.push(game);
 }
 
 /* Uses model RequestGameList */
 function onRequestGameList(socket, data) {
-    let gameIds = ['Test game 1', 'Test game 2']; // TODO: Get current available games.
+    let gameIds = games.map((game) => { return game.name; }).concat(['Test game 1', 'Test game 2']); // TODO: Get current available games.
     let responseGameList = new ResponseGameList();
     responseGameList.gameIds = gameIds;
 

@@ -1,4 +1,8 @@
 
-export default Category = {
-    Name: String,
+class Category {
+    constructor(name) {
+        this.name = name;
+    }
 };
+
+module.exports = Category;

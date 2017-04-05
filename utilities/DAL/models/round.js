@@ -1,5 +1,9 @@
 
-export default Round = {
-    Questions: [],
-    AnsweredQuestions: [],
+class Round {
+    constructor() {
+        this.questions = [];
+        this.answeredQuestions = [];
+    }
 };
+
+module.exports = Round;

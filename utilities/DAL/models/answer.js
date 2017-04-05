@@ -1,5 +1,9 @@
 
-export default Answer = {
-    Question: Question,
-    Value: String,
+class Answer {
+    constructor(question, value) {
+        this.question = question;
+        this.value = value;
+    }
 };
+
+module.exports = Answer;

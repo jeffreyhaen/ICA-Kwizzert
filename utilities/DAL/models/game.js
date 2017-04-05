@@ -1,6 +1,10 @@
 
-export default Game = {
-    MaxRounds: Number,
-    Rounds: [],
-    Teams: [],
+class Game {
+    constructor(name) {
+        this.name = name;
+        this.rounds = [];
+        this.teams = [];
+    }
 };
+
+module.exports = Game;

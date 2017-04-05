@@ -10,8 +10,8 @@ class SocketContainer extends Component {
     constructor(props) {
         super(props);
 
-        var socket = io('http://localhost:3001/');
-        var registerClient = new RegisterClient("kwizmeestert");
+        let socket = io('http://localhost:3001/');
+        let registerClient = new RegisterClient("kwizmeestert");
 
         socket.emit(registerClient.type, registerClient);
 
@@ -34,7 +34,7 @@ function matchDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        socket: state.socket,
+        socket: state.socketStore.socket,
     };
 }
 

@@ -7,6 +7,7 @@ var path    = require('path');
 
 var RegisterClient = require('../utilities/DAL/communication-protocol/registerClient');
 var RegisterTeam = require('../utilities/DAL/communication-protocol/registerTeam');
+var InitializeGame = require('../utilities/DAL/communication-protocol/initializeGame');
 var RequestGameList = require('../utilities/DAL/communication-protocol/requestGameList');
 var ResponseGameList = require('../utilities/DAL/communication-protocol/responseGameList');
 
@@ -33,7 +34,8 @@ server.listen(3001, function() {
 var events = [
     { type: new RegisterClient().type, handler: onRegisterClient },
     { type: new RegisterTeam().type, handler: onRegisterTeam },
-    { type: new onRequestGameList().type, handler: onRequestGameList },
+    { type: new InitializeGame().type, handler: onInitializeGame },
+    { type: new RequestGameList().type, handler: onRequestGameList },
 ];
 
 var clients = []; // { socket: mySocket, clientType: myClientType } // See model RegisterClient.
@@ -66,6 +68,11 @@ function onRegisterTeam(socket, data) {
             
     //     }
     // }
+}
+
+/* Uses model InitializeGame */
+function onInitializeGame(socket, data) {
+
 }
 
 /* Uses model RequestGameList */

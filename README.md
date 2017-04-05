@@ -261,7 +261,7 @@ GameStop
 }
 ```
 
-### categoriën kiezen 
+### Categoriën kiezen 
 Een KwizMeestert moet na het stoppen van de aameldperiode een aantal categoriën kiezen.
 
 **Bericht cyclus**: KwizMeestert-App -> Server

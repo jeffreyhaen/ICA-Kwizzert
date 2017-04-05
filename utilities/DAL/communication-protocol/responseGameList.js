@@ -1,8 +1,8 @@
 
 class ResponseGameList {
-    constructor() {
+    constructor(gameIds) {
         this.type = "ResponseGameList";
-        this.gameIds = [];
+        this.gameIds = gameIds;
     }
 }
 

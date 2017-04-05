@@ -1,7 +1,8 @@
 
 class Team {
-    constructor(name) {
+    constructor(name, accepted = null) {
         this.name = name;
+        this.accepted = accepted;
     }
 };
 

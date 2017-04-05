@@ -1,5 +1,4 @@
 
-
 class GameInformation {
     constructor(gameId, teamInformation, timeleft) {
         this.type = "GameInformation";

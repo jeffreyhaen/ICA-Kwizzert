@@ -12,23 +12,23 @@ var RegisterTeam = require('../utilities/DAL/communication-protocol/registerTeam
 var CreateGame = require('../utilities/DAL/communication-protocol/createGame');
 var RequestGameList = require('../utilities/DAL/communication-protocol/requestGameList');
 var ResponseGameList = require('../utilities/DAL/communication-protocol/responseGameList');
+var RateTeamRegistration = require('../utilities/DAL/communication-protocol/rateTeamRegistration');
+var RequestGameTeams = require('../utilities/DAL/communication-protocol/requestGameTeams');
+var ResponseGameTeams = require('../utilities/DAL/communication-protocol/responseGameTeams');
+var GameStart = require('../utilities/DAL/communication-protocol/gameStart');
 
 server.listen(3001, function() {
     console.log("Kwizzert server listening on port 3001!");
 });
-
-// var games = [
-//     {
-//         gameId: "Game 1",
-//         teams: [{ type: "scoreboard", socket: SOCKET }, { type: "team", socket: SOCKET }]
-//     }
-// ];
 
 var events = [
     { type: new RegisterClient().type, handler: onRegisterClient },
     { type: new RegisterTeam().type, handler: onRegisterTeam },
     { type: new CreateGame().type, handler: onCreateGame },
     { type: new RequestGameList().type, handler: onRequestGameList },
+    { type: new RateTeamRegistration().type, handler: onRateTeamRegistration },
+    { type: new RequestGameTeams().type, handler: onRequestGameTeams },
+    { type: new GameStart().type, handler: onGameStart },
 ];
 
 var games = [];     // See model Game. Example: { name: "Gametest 1", rounds: [], teams: [] }.
@@ -75,9 +75,38 @@ function onCreateGame(socket, data) {
 
 /* Uses model RequestGameList */
 function onRequestGameList(socket, data) {
-    let gameIds = games.map((game) => { return game.name; }).concat(['Test game 1', 'Test game 2']); // TODO: Get current available games.
-    let responseGameList = new ResponseGameList();
-    responseGameList.gameIds = gameIds;
-
+    let gameIds = games.map((game) => { return game.name; });
+    let responseGameList = new ResponseGameList(gameIds);
+    
     socket.emit(responseGameList.type, responseGameList);
+}
+
+/* Uses model RateTeamRegistration */
+function onRateTeamRegistration(socket, data) {
+    let game = games.find((item) => item.gameId === data.gameId);
+
+    if (game !== undefined) {
+        let team = game.teams.find((item) => item.teamId === data.teamId);
+
+        if (team !== undefined) {
+            team.accepted = data.accepted;
+        }
+    }
+}
+
+/* Uses model RequestGameTeams */
+function onRequestGameTeams(socket, data) {
+    let game = games.find((item) => item.gameId === data.gameId);
+    let responseGameTeams = new ResponseGameTeams(game.id, game.teams);
+
+    socket.emit(responseGameTeams.type, responseGameTeams);
+}
+
+/* Uses model GameStart */
+function onGameStart(socket, data) {
+    let game = games.find((item) => item.gameId === data.gameId);
+    
+    if (game !== undefined) {
+        game.started = true;
+    }
 }

@@ -1,3 +1,4 @@
+
 global.ChooseCategories = require("./chooseCategories.js");
 global.GameInformation = require("./gameInformation.js");
 global.GameStart = require("./gameStart.js");
@@ -13,15 +14,3 @@ global.RequestTeamGameInformation = require("./requestTeamGameInformation.js");
 global.ResponseTeamGameInformation = require("./responseTeamGameInformation.js");
 global.RoundStart = require("./roundStart.js");
 global.RoundStop = require("./roundStop.js");
-// Load `*.js` under current directory as properties
-//  i.e., `User.js` will become `exports['User']` or `exports.User`
-// require('fs').readdirSync(__dirname + '/').forEach(function(file) {
-//   if (file.match(/\.js$/) !== null && file !== 'index.js') {
-//     var name = capitalizeFirstLetter(file.replace('.js', ''));
-//     global[name] = require('./' + file);
-//   }
-// });
-
-// function capitalizeFirstLetter(string) {
-//     return string.charAt(0).toUpperCase() + string.slice(1);
-// }

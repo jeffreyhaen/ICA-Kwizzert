@@ -1,27 +1,31 @@
 'use strict'
 
-var app = require('express');
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-var path    = require('path');
+const app = require('express');
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+const path = require('path');
 
-var Game = require('../utilities/DAL/models/game');
+const { // Models...
+    Game,
+} = require('../utilities/DAL/models/');
 
-var RegisterClient = require('../utilities/DAL/communication-protocol/registerClient');
-var RegisterTeam = require('../utilities/DAL/communication-protocol/registerTeam');
-var CreateGame = require('../utilities/DAL/communication-protocol/createGame');
-var RequestGameList = require('../utilities/DAL/communication-protocol/requestGameList');
-var ResponseGameList = require('../utilities/DAL/communication-protocol/responseGameList');
-var RateTeamRegistration = require('../utilities/DAL/communication-protocol/rateTeamRegistration');
-var RequestGameTeams = require('../utilities/DAL/communication-protocol/requestGameTeams');
-var ResponseGameTeams = require('../utilities/DAL/communication-protocol/responseGameTeams');
-var GameStart = require('../utilities/DAL/communication-protocol/gameStart');
+const { // Communication-protocol...
+    RegisterClient, 
+    RegisterTeam, 
+    CreateGame, 
+    RequestGameList, 
+    ResponseGameList,
+    RateTeamRegistration,
+    RequestGameTeams,
+    ResponseGameTeams,
+    GameStart,
+} = require('../utilities/DAL/communication-protocol/');
 
 server.listen(3001, function() {
     console.log("Kwizzert server listening on port 3001!");
 });
 
-var events = [
+const events = [
     { type: new RegisterClient().type, handler: onRegisterClient },
     { type: new RegisterTeam().type, handler: onRegisterTeam },
     { type: new CreateGame().type, handler: onCreateGame },
@@ -48,13 +52,13 @@ io.on('connection', (client) => {
     });
 });
 
-/* Uses model RegisterClient. */
+/* Event handler for communication-protocol RegisterClient. */
 function onRegisterClient(socket, data) {
     let client = { socket: socket, clientType: data.clientType }
     clients.push(client);
 }
 
-/* Uses model RegisterTeam */
+/* Event handler for communication-protocol RegisterTeam */
 function onRegisterTeam(socket, data) {
     // if(socket == clients.first(socket && type == "team")) {
     //     if (game.in(message.gameId))
@@ -64,7 +68,7 @@ function onRegisterTeam(socket, data) {
     // }
 }
 
-/* Uses model CreateGame */
+/* Event handler for communication-protocol CreateGame */
 function onCreateGame(socket, data) {
     let newGame = new Game(data.name);
     
@@ -73,7 +77,7 @@ function onCreateGame(socket, data) {
     }
 }
 
-/* Uses model RequestGameList */
+/* Event handler for communication-protocol RequestGameList */
 function onRequestGameList(socket, data) {
     let gameIds = games.map((game) => { return game.name; });
     let responseGameList = new ResponseGameList(gameIds);
@@ -81,7 +85,7 @@ function onRequestGameList(socket, data) {
     socket.emit(responseGameList.type, responseGameList);
 }
 
-/* Uses model RateTeamRegistration */
+/* Event handler for communication-protocol RateTeamRegistration */
 function onRateTeamRegistration(socket, data) {
     let game = games.find((item) => item.gameId === data.gameId);
 
@@ -94,7 +98,7 @@ function onRateTeamRegistration(socket, data) {
     }
 }
 
-/* Uses model RequestGameTeams */
+/* Event handler for communication-protocol RequestGameTeams */
 function onRequestGameTeams(socket, data) {
     let game = games.find((item) => item.gameId === data.gameId);
     let responseGameTeams = new ResponseGameTeams(game.id, game.teams);
@@ -102,7 +106,7 @@ function onRequestGameTeams(socket, data) {
     socket.emit(responseGameTeams.type, responseGameTeams);
 }
 
-/* Uses model GameStart */
+/* Event handler for communication-protocol GameStart */
 function onGameStart(socket, data) {
     let game = games.find((item) => item.gameId === data.gameId);
     

@@ -1,4 +1,5 @@
 
+/* Used to rate an answer put by a team (approve or disapprove). */
 class RateTeamAnswer {
     constructor(gameId, teamId, questionId, value) {
         this.type = "RateTeamAnswer";

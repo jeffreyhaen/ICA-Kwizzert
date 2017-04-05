@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { onSocketInitialize } from '../actions/on-socket';
 
-const RegisterClient = require('../../../../utilities/DAL/communication-protocol/registerClient');
+const { RegisterClient } = require('../../../../utilities/DAL/communication-protocol/');
 const io = require('socket.io-client');
 
 class SocketContainer extends Component {

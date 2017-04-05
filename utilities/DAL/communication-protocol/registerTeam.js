@@ -1,4 +1,5 @@
 
+/* Used to register a new team to the given game. */
 class RegisterTeam {
     constructor(gameId, name) {
         this.type = "RegisterTeam";

@@ -1,4 +1,5 @@
 
+/* Used to create a new game. */
 class CreateGame {
     constructor(name) {
         this.type = "CreateGame";

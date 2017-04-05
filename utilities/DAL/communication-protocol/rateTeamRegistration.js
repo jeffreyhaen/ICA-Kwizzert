@@ -1,4 +1,5 @@
 
+/* Used to rate a team registration (approve or disapprove). */
 class RateTeamRegistration {
     constructor(gameId, teamId, accepted) {
         this.type = "RateTeamRegistration";

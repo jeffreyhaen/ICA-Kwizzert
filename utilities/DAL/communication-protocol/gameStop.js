@@ -1,4 +1,5 @@
 
+/* Used to stop the given game. */
 class GameStop {
     constructor(gameId) {
         this.type = "GameStop";

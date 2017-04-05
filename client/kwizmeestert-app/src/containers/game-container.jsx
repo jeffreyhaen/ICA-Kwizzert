@@ -3,9 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { onGameReceiveList } from '../actions/on-game';
 
-const RequestGameList = require('../../../../utilities/DAL/communication-protocol/requestGameList');
-const ResponseGameList = require('../../../../utilities/DAL/communication-protocol/responseGameList');
-const CreateGame = require('../../../../utilities/DAL/communication-protocol/createGame');
+const { RequestGameList, ResponseGameList, CreateGame } = require('../../../../utilities/DAL/communication-protocol/');
 
 class GameContainer extends Component {
     constructor(props) {

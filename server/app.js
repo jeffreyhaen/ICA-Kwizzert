@@ -67,7 +67,10 @@ function onRegisterTeam(socket, data) {
 /* Uses model CreateGame */
 function onCreateGame(socket, data) {
     let newGame = new Game(data.name);
-    games.push(game);
+    
+    if (newGame.name !== undefined && games.filter((game) => game.name === newGame.name).length === 0) {
+        games.push(newGame);
+    }
 }
 
 /* Uses model RequestGameList */

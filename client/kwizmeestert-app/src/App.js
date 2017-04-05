@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+require('../../../utilities/DAL/communication-protocol');
+
 class App extends Component {
+
+  // test = new RegisterClient();
+
   render() {
     return (
       <div className="App">

@@ -5,7 +5,8 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var path    = require('path');
 
-require('../utilities/DAL/communication-protocol');
+var RegisterClient = require('../utilities/DAL/communication-protocol/registerClient');
+var RegisterTeam = require('../utilities/DAL/communication-protocol/registerTeam');
 
 server.listen(3001, function() {
     console.log("Kwizzert server listening on port 3001!");
@@ -26,14 +27,12 @@ server.listen(3001, function() {
 //     }
 // ];
 
-// var clients = [
-//     { type: "scoreboard", socket: MOCKET }
-// ]
-
 var events = [
     { type: new RegisterClient().type, handler: onRegisterClient },
     { type: new RegisterTeam().type, handler: onRegisterTeam },
 ];
+
+var clients = []; // { socket: mySocket, clientType: myClientType } // See model RegisterClient.
 
 io.on('connection', (client) => {
     events.forEach((event, index) => {
@@ -41,12 +40,17 @@ io.on('connection', (client) => {
             console.log(`Event ${event.type} called by client ${client.id}.`);
             event.handler(client, data);
         });
-    })
+    });
+
+    client.on('disconnect', function () {
+        clients = clients.filter((item) => item.socket.id !== client.id);
+    });
 });
 
+/* Uses model RegisterClient. */
 function onRegisterClient(socket, data) {
-    console.log(socket.id);
-    console.log(data);
+    var client = { socket: socket, clientType: data.clientType }
+    clients.push(client);
 }
 
 function onRegisterTeam(socket, data) {

@@ -5,16 +5,18 @@ import { onGameReceiveList } from '../actions/on-game';
 
 const RequestGameList = require('../../../../utilities/DAL/communication-protocol/requestGameList');
 const ResponseGameList = require('../../../../utilities/DAL/communication-protocol/responseGameList');
+const CreateGame = require('../../../../utilities/DAL/communication-protocol/createGame');
 
 class GameContainer extends Component {
     constructor(props) {
         super(props);
+        this.reloadGameList();
+    }
 
+    reloadGameList() {
         let requestGameList = new RequestGameList();
 
-        console.log(this.props);
-        this.props.socket.on(new ResponseGameList().type, (responseGameList) => { 
-            console.log("test callback gamelist");
+        this.props.socket.on(new ResponseGameList().type, (responseGameList) => {
             this.props.onGameReceiveList(responseGameList.gameIds);
             this.props.socket.off(responseGameList.type);
         });
@@ -22,18 +24,52 @@ class GameContainer extends Component {
         this.props.socket.emit(requestGameList.type, requestGameList);
     }
 
+    sendNewGame(event) {
+        event.preventDefault();
+
+        let createGame = new CreateGame(event.target.txtName.value);
+        
+        this.props.socket.emit(createGame.type, createGame);
+
+        this.reloadGameList();
+    }
+
     render() {
-        console.log('ren-d');
-        console.log(this.props.gameList);
         return (
-            <div>
-                {
-                    this.props.gameList.map((val) => {
-                        return (<p>{`game id: ${val}`}</p>)
-                    })
-                }
+            <div className="container">
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Password</th>
+                            <th>GoTo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.props.gameList.map((gameId, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>{index}</td>
+                                        <td>{gameId}</td>
+                                        <td>LinkToGame</td>
+                                    </tr>
+                                )
+                            })}
+                    </tbody>
+                </table>
+                <br />
+                <p>Add new game:</p>
+                <form name="newGame" onSubmit={(e) => { 
+                    this.sendNewGame(e);
+                    }}>
+                    <div className="form-group">
+                        <input type="text" className="form-control" name="txtName" />
+                    </div>
+                    <input type="submit" className="btn btn-primary" value="Add" />
+                </form>
             </div>
-        );  
+        );
     }
 }
 

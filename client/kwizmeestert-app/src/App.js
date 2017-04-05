@@ -11,9 +11,10 @@ class App extends Component {
         <SocketContainer />
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+          <h2>KwizMeestert</h2>
         </div>
         <div>
+            <br />
             {this.props.children}
         </div>
       </div>

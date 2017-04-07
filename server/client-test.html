@@ -15,8 +15,8 @@
                 socket.emit('RequestGameList', { });
             }
 
-            function requestGameTeams() {
-                socket.emit('RequestGameTeams', { gameId: "test-game" });
+            function requestGameInformation() {
+                socket.emit('RequestGameInformation', { gameId: "test-game" });
             }
 
             function rateTeamRegistration() {
@@ -35,7 +35,7 @@
                 console.log(data);
             });
 
-            socket.on('ResponseGameTeams', function(data) {
+            socket.on('ResponseGameInformation', function(data) {
                 console.log(data);
             });
         </script>
@@ -43,7 +43,7 @@
     <body>
         <button id="createGame" type="button" onclick="createGame()">createGame</button>
         <button id="requestGameList" type="button" onclick="requestGameList()">requestGameList</button>
-        <button id="requestGameTeams" type="button" onclick="requestGameTeams()">requestGameTeams</button>
+        <button id="requestGameInformation" type="button" onclick="requestGameInformation()">requestGameInformation</button>
         <button id="rateTeamRegistration" type="button" onclick="rateTeamRegistration()">rateTeamRegistration</button>
         <button id="gameStart" type="button" onclick="gameStart()">gameStart</button>
         <button id="registerTeam" type="button" onclick="registerTeam()">registerTeam</button>

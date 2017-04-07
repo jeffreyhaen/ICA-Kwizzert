@@ -17,8 +17,8 @@ const { // Communication-protocol...
     RequestGameList, 
     ResponseGameList,
     RateTeamRegistration,
-    RequestGameTeams,
-    ResponseGameTeams,
+    RequestGameInformation,
+    ResponseGameInformation,
     GameStart,
     GameStop,
 } = require('../utilities/DAL/communication-protocol/');
@@ -33,7 +33,7 @@ const events = [
     { type: new CreateGame().type, handler: onCreateGame },
     { type: new RequestGameList().type, handler: onRequestGameList },
     { type: new RateTeamRegistration().type, handler: onRateTeamRegistration },
-    { type: new RequestGameTeams().type, handler: onRequestGameTeams },
+    { type: new RequestGameInformation().type, handler: onRequestGameInformation },
     { type: new GameStart().type, handler: onGameStart },
     { type: new GameStop().type, handler: onGameStop },
 ];
@@ -45,7 +45,8 @@ io.on('connection', (client) => {
     events.forEach((event, index) => {
         client.on(event.type, function(data) {
             console.log(`Event ${event.type} called by client ${client.id}.`);
-            event.handler(client, data);
+            try { event.handler(client, data); }
+            catch(error) { console.log(error); }
         });
     });
 
@@ -96,13 +97,13 @@ function onRateTeamRegistration(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol RequestGameTeams */
-function onRequestGameTeams(socket, data) {
+/* Event handler for communication-protocol RequestGameInformation */
+function onRequestGameInformation(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
 
     if (game !== undefined) {
-        let responseGameTeams = new ResponseGameTeams(game.name, game.teams);
-        socket.emit(responseGameTeams.type, responseGameTeams);
+        let responseGameInformation = new ResponseGameInformation(game);
+        socket.emit(responseGameInformation.type, responseGameInformation);
     }
 }
 

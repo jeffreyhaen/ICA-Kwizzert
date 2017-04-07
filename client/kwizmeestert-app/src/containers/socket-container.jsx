@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { onSocketInitialize } from '../actions/on-socket';
 
 const io = require('socket.io-client');
-const constants = require('../../../../utilities/DAL/constants');
+const constants = require('../../../../utilities/constants');
 const { RegisterClient } = require('../../../../utilities/DAL/communication-protocol/');
 
 

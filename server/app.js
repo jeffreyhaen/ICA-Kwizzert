@@ -4,7 +4,7 @@ const app = require('express');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const path = require('path');
-const constants = require("../utilities/DAL/constants");
+const constants = require("../utilities/constants");
 
 const { // Models...
     Game,
@@ -213,19 +213,15 @@ function onRegisterTeam(socket, data) {
 function onRegisterTeamAnswer(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     
-    console.log(game);
     if (game !== undefined) {
         let team = game.teams.find((item) => item.name === data.teamId);
 
-        console.log(team);
         if (team !== undefined) {
             let answer = new Answer(team, game.currentQuestion, data.value);
             let responseTeamAnswer = new ResponseTeamAnswer(answer);
             let round = game.rounds.find((item) => item.number === data.roundId);
             let clientsToNotify = clients.filter((item) => item.clientType === constants.KWIZMEESTERT_APP); // TODO: Filter on clients that are bound to the current game.
             
-            console.log(round);
-
             if (round !== undefined) {
                 round.currentQuestion.teamAnswers.push(answer);
 

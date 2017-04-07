@@ -20,6 +20,7 @@ const { // Communication-protocol...
     RequestGameTeams,
     ResponseGameTeams,
     GameStart,
+    GameStop,
 } = require('../utilities/DAL/communication-protocol/');
 
 server.listen(3001, function() {
@@ -34,6 +35,7 @@ const events = [
     { type: new RateTeamRegistration().type, handler: onRateTeamRegistration },
     { type: new RequestGameTeams().type, handler: onRequestGameTeams },
     { type: new GameStart().type, handler: onGameStart },
+    { type: new GameStop().type, handler: onGameStop },
 ];
 
 var games = [];     // See model Game. Example: { name: "Gametest 1", rounds: [], teams: [] }.
@@ -53,24 +55,16 @@ io.on('connection', (client) => {
     });
 });
 
+/* ===== Common events ===== */
+
 /* Event handler for communication-protocol RegisterClient. */
 function onRegisterClient(socket, data) {
     let client = { socket: socket, clientType: data.clientType }
     clients.push(client);
 }
 
-/* Event handler for communication-protocol RegisterTeam */
-function onRegisterTeam(socket, data) {
-    let game = games.find((item) => item.name === data.gameId);
 
-    if (game !== undefined) {
-        let team = new Team(data.name);
-        
-        if (team.name !== undefined && game.teams.filter((item) => item.name === team.name).length === 0) {
-            game.teams.push(team);
-        }
-    }
-}
+/* ===== KwizMeester-app events ===== */
 
 /* Event handler for communication-protocol CreateGame */
 function onCreateGame(socket, data) {
@@ -118,5 +112,43 @@ function onGameStart(socket, data) {
     
     if (game !== undefined) {
         game.started = true;
+    }
+}
+
+/* Event handler for communication-protocol GameStop */
+function onGameStop(socket, data) {
+    let game = games.find((item) => item.name === data.gameId);
+    
+    if (game !== undefined) {
+        game.started = false;
+    }
+}
+
+
+/* ===== Team-app events ===== */
+
+/* Event handler for communication-protocol RegisterTeam */
+function onRegisterTeam(socket, data) {
+    let game = games.find((item) => item.name === data.gameId);
+
+    if (game !== undefined) {
+        let team = new Team(data.name);
+        
+        if (team.name !== undefined && game.teams.filter((item) => item.name === team.name).length === 0) {
+            game.teams.push(team);
+        }
+    }
+}
+
+/* Event handler for communication-protocol GameStop */
+function onRegisterAnswer(socket, data) {
+    let game = games.find((item) => item.name === data.gameId);
+    
+    if (game !== undefined) {
+        let team = game.teams.find((item) => item.name === data.teamId);
+
+        if (team !== undefined) {
+            // TODO: Register answer for the current question. Implement current question first...
+        }
     }
 }

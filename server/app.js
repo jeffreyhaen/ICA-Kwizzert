@@ -14,6 +14,7 @@ const { // Models...
 const { // Communication-protocol...
     RegisterClient, 
     RegisterTeam, 
+    ChooseCategories,
     RequestCategoryList,
     ResponseCategoryList,
     RequestGameList, 
@@ -33,6 +34,7 @@ server.listen(3001, function() {
 const events = [
     { type: new RegisterClient().type, handler: onRegisterClient },
     { type: new RegisterTeam().type, handler: onRegisterTeam },
+    { type: new ChooseCategories().type, handler: onChooseCategories },
     { type: new RequestCategoryList().type, handler: onRequestCategoryList },
     { type: new RequestGameList().type, handler: onRequestGameList },
     { type: new RequestGameInformation().type, handler: onRequestGameInformation },
@@ -120,8 +122,8 @@ function onRequestCategoryList(socket, data) {
 }
 
 /* Event handler for communication-protocol ChooseCategories */
-function onRequestCategoryList(socket, data) {
-    
+function onChooseCategories(socket, data) {
+    // TODO: Implement...
 }
 
 /* Event handler for communication-protocol GameStart */

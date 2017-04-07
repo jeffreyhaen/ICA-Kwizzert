@@ -5,4 +5,4 @@ module.exports.Round = require('./round');
 module.exports.Question = require('./question');
 module.exports.Team = require('./team');
 module.exports.TeamAnswer = require('./teamAnswer');
-module.exports.CurrentQuestion = require('./currentQuestion');
+module.exports.PlayedQuestion = require('./playedQuestion');

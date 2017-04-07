@@ -11,12 +11,20 @@
                 socket.emit('CreateGame', { name: 'test-game' });
             }
 
+            function startGame() {
+                socket.emit('StartGame', { gameId: "test-game" });
+            }
+
             function chooseCategories() {
                 socket.emit('ChooseCategories', { gameId: "test-game", categoryIds: ["test-category-1", "test-category-2", "test-category-3"] });
             }
 
-            function chooseQuestion() {
-                socket.emit('ChooseQuestion', { gameId: "test-game", roundId: 1, questionId: "test-question-1" });
+            function startQuestion() {
+                socket.emit('StartQuestion', { gameId: "test-game", roundId: 1, questionId: "test-question-1" });
+            }
+
+            function stopQuestion() {
+                socket.emit('StopQuestion', { gameId: "test-game", roundId: 1 });
             }
 
             function requestCategoryList() {
@@ -37,10 +45,6 @@
 
             function rateTeamRegistration() {
                 socket.emit('RateTeamRegistration', { gameId: "test-game", teamId: "test-team", accepted: true });
-            }
-
-            function gameStart() {
-                socket.emit('GameStart', { gameId: "test-game" });
             }
 
             socket.on('ResponseCategoryList', function(data) {
@@ -69,9 +73,10 @@
         <h2>KwizMeestert-app</h2>      
         <button id="createGame" type="button" onclick="createGame()">createGame</button>
         <button id="rateTeamRegistration" type="button" onclick="rateTeamRegistration()">rateTeamRegistration</button>
-        <button id="gameStart" type="button" onclick="gameStart()">gameStart</button>
+        <button id="startGame" type="button" onclick="startGame()">startGame</button>
         <button id="chooseCategories" type="button" onclick="chooseCategories()">chooseCategories</button>
-        <button id="chooseQuestion" type="button" onclick="chooseQuestion()">chooseQuestion</button>
+        <button id="startQuestion" type="button" onclick="startQuestion()">startQuestion</button>
+        <button id="stopQuestion" type="button" onclick="stopQuestion()">stopQuestion</button>
 
         <p>Requests:</p>
         <button id="requestGameList" type="button" onclick="requestGameList()">requestGameList</button>

@@ -11,7 +11,7 @@ const { // Models...
     Round,
     Category,
     Question,
-    CurrentQuestion,
+    PlayedQuestion,
     Team,
     TeamAnswer,
 } = require('../utilities/DAL/models/');
@@ -172,7 +172,7 @@ function onStartQuestion(socket, data) {
     let round = game.rounds.find((item) => item.number === data.roundId);
     let question = new Question(null, data.questionId, "test-answer-1"); // TODO: Get question from the database.
 
-    round.currentQuestion = new CurrentQuestion(question);
+    round.currentQuestion = new PlayedQuestion(question);
 
     let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
     clientsToNotify.forEach((item, index) => {
@@ -182,7 +182,16 @@ function onStartQuestion(socket, data) {
 
 /* Event handler for communication-protocol StopQuestion */
 function onStopQuestion(socket, data) {
-    // TODO: Implement...
+    let game = games.find((item) => item.name === data.gameId);
+    let round = game.rounds.find((item) => item.number === data.roundId);
+
+    round.answeredQuestions.push(round.currentQuestion);
+    round.currentQuestion = null;
+
+    let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
+    clientsToNotify.forEach((item, index) => {
+        //item.socket.emit(); // TODO: Create Response(NewQuestion) and let the scoreboard and teams know.
+    });
 }
 
 /* Event handler for communication-protocol GameStart */

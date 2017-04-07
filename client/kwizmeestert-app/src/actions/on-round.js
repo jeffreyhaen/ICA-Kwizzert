@@ -11,3 +11,10 @@ export const onQuestionSelect = (questionId) => {
         payload: { questionId: questionId },
     }
 }
+
+export const onRoundAnswersReceived = (answers) => {
+    return {
+        type: 'ON_ROUND_ANSWERS_RECEIVED',
+        payload: { answers: answers },
+    }
+}

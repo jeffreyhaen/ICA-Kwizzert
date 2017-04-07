@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Switch from 'react-bootstrap-switch';
 import { onRoundQuestionsReceived, onQuestionSelect } from '../actions/on-round';
 
-const { RequestRoundInformation, ResponseRoundInformation, ChooseCategories } = require('../../../../utilities/DAL/communication-protocol/');
+const { RequestRoundInformation, ResponseRoundInformation, ChooseQuestion } = require('../../../../utilities/DAL/communication-protocol/');
 
 class RoundChooseQuestions extends Component {
     constructor(props) {
@@ -41,12 +41,13 @@ class RoundChooseQuestions extends Component {
         }
     }
 
-    onCategoriesSubmit() {
-        //if (this.props.selectedCategories.length === 3) {
-        //    let chooseCategories = new ChooseCategories(this.props.game.name, this.props.selectedCategories);
-        //    
-        //    this.props.socket.emit(chooseCategories.type, chooseCategories);
-        //}
+    onQuestionSubmit() {
+        if (this.props.selectedQuestion !== undefined) {
+            let chooseQuestion = new ChooseQuestion(this.props.game.name, this.props.game.rounds.length, this.props.selectedQuestion);
+            this.props.socket.emit(chooseQuestion.type, chooseQuestion);
+
+            this.context.router.push('/rateTeamAnswers');
+        }
     }
 
     render() {
@@ -76,9 +77,9 @@ class RoundChooseQuestions extends Component {
                             }
                     </tbody>
                 </table>
-                <input type="button" className="btn btn-primary pull-right" value="Doorgaan" disabled={this.props.selectedQuestion === undefined} onClick={(e) => {
+                <input type="button" className="btn btn-primary pull-right" value="Start" disabled={this.props.selectedQuestion === undefined} onClick={(e) => {
                     e.preventDefault();
-                    //this.onCategoriesSubmit();
+                    this.onQuestionSubmit();
                 }} />
             </div>
         );
@@ -102,5 +103,9 @@ function mapStateToProps(state) {
         selectedQuestion: state.roundStore.selectedQuestion,
     };
 }
+
+RoundChooseQuestions.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 export default connect(mapStateToProps, matchDispatchToProps)(RoundChooseQuestions);

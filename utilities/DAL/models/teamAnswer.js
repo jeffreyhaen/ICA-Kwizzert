@@ -1,5 +1,5 @@
 
-class Answer {
+class TeamAnswer {
     constructor(team, question, value) {
         this.team = team,
         this.question = question;
@@ -7,4 +7,4 @@ class Answer {
     }
 };
 
-module.exports = Answer;
+module.exports = TeamAnswer;

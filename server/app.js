@@ -9,10 +9,11 @@ const constants = require("../utilities/constants");
 const { // Models...
     Game,
     Round,
-    Team,
     Category,
     Question,
-    Answer,
+    CurrentQuestion,
+    Team,
+    TeamAnswer,
 } = require('../utilities/DAL/models/');
 
 const { // Communication-protocol...
@@ -165,9 +166,9 @@ function onChooseCategories(socket, data) {
 function onChooseQuestion(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     let round = game.rounds.find((item) => item.number === data.roundId);
-    let question = new Question(null, data.questionId); // TODO: Get question from the database.
+    let question = new Question(null, data.questionId, "test-answer-1"); // TODO: Get question from the database.
 
-    round.currentQuestion = question;
+    round.currentQuestion = new CurrentQuestion(question);
 
     let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
     clientsToNotify.forEach((item, index) => {
@@ -212,23 +213,21 @@ function onRegisterTeam(socket, data) {
 /* Event handler for communication-protocol RegisterTeamAnswer */
 function onRegisterTeamAnswer(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
-    
+
     if (game !== undefined) {
         let team = game.teams.find((item) => item.name === data.teamId);
+        let round = game.rounds.find((item) => item.number === data.roundId);
 
-        if (team !== undefined) {
-            let answer = new Answer(team, game.currentQuestion, data.value);
-            let responseTeamAnswer = new ResponseTeamAnswer(answer);
-            let round = game.rounds.find((item) => item.number === data.roundId);
+        if (team !== undefined && round !== undefined && round.currentQuestion !== null) {
+            let answer = new TeamAnswer(team, round.currentQuestion.question, data.value);
+            round.currentQuestion.teamAnswers.push(answer);
+
+            let responseRoundInformation = new ResponseRoundInformation(round);
             let clientsToNotify = clients.filter((item) => item.clientType === constants.KWIZMEESTERT_APP); // TODO: Filter on clients that are bound to the current game.
-            
-            if (round !== undefined) {
-                round.currentQuestion.teamAnswers.push(answer);
 
-                clientsToNotify.forEach((item, index) => {
-                    item.socket.emit(responseTeamAnswer.type, responseTeamAnswer);
-                });
-            }
+            clientsToNotify.forEach((item, index) => {
+                item.socket.emit(responseRoundInformation.type, responseRoundInformation);
+            });
         }
     }
 }

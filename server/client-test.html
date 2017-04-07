@@ -11,6 +11,10 @@
                 socket.emit('CreateGame', { name: 'test-game' });
             }
 
+            function requestCategoryList() {
+                socket.emit('RequestCategoryList', { });
+            }
+
             function requestGameList() {
                 socket.emit('RequestGameList', { });
             }
@@ -31,6 +35,10 @@
                 socket.emit('RegisterTeam', { gameId: "test-game", name: "test-team" });
             }
 
+            socket.on('ResponseCategoryList', function(data) {
+                console.log(data);
+            });
+
             socket.on('ResponseGameList', function(data) {
                 console.log(data);
             });
@@ -47,5 +55,6 @@
         <button id="rateTeamRegistration" type="button" onclick="rateTeamRegistration()">rateTeamRegistration</button>
         <button id="gameStart" type="button" onclick="gameStart()">gameStart</button>
         <button id="registerTeam" type="button" onclick="registerTeam()">registerTeam</button>
+        <button id="requestCategoryList" type="button" onclick="requestCategoryList()">requestCategoryList</button>
     </body>
 </html>

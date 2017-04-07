@@ -8,17 +8,20 @@ const path = require('path');
 const { // Models...
     Game,
     Team,
+    Category,
 } = require('../utilities/DAL/models/');
 
 const { // Communication-protocol...
     RegisterClient, 
     RegisterTeam, 
-    CreateGame, 
+    RequestCategoryList,
+    ResponseCategoryList,
     RequestGameList, 
     ResponseGameList,
-    RateTeamRegistration,
     RequestGameInformation,
     ResponseGameInformation,
+    RateTeamRegistration,
+    CreateGame, 
     GameStart,
     GameStop,
 } = require('../utilities/DAL/communication-protocol/');
@@ -30,10 +33,11 @@ server.listen(3001, function() {
 const events = [
     { type: new RegisterClient().type, handler: onRegisterClient },
     { type: new RegisterTeam().type, handler: onRegisterTeam },
-    { type: new CreateGame().type, handler: onCreateGame },
+    { type: new RequestCategoryList().type, handler: onRequestCategoryList },
     { type: new RequestGameList().type, handler: onRequestGameList },
-    { type: new RateTeamRegistration().type, handler: onRateTeamRegistration },
     { type: new RequestGameInformation().type, handler: onRequestGameInformation },
+    { type: new RateTeamRegistration().type, handler: onRateTeamRegistration },
+    { type: new CreateGame().type, handler: onCreateGame },
     { type: new GameStart().type, handler: onGameStart },
     { type: new GameStop().type, handler: onGameStop },
 ];
@@ -84,6 +88,16 @@ function onRequestGameList(socket, data) {
     socket.emit(responseGameList.type, responseGameList);
 }
 
+/* Event handler for communication-protocol RequestGameInformation */
+function onRequestGameInformation(socket, data) {
+    let game = games.find((item) => item.name === data.gameId);
+
+    if (game !== undefined) {
+        let responseGameInformation = new ResponseGameInformation(game);
+        socket.emit(responseGameInformation.type, responseGameInformation);
+    }
+}
+
 /* Event handler for communication-protocol RateTeamRegistration */
 function onRateTeamRegistration(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
@@ -97,14 +111,12 @@ function onRateTeamRegistration(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol RequestGameInformation */
-function onRequestGameInformation(socket, data) {
-    let game = games.find((item) => item.name === data.gameId);
+/* Event handler for communication-protocol GameStart */
+function onRequestCategoryList(socket, data) {
+    let categories = [new Category('test-category-1'), new Category('test-category-2'), new Category('test-category-3')]; // TODO: Implement database...
+    let responseCategoryList = new ResponseCategoryList(categories);
 
-    if (game !== undefined) {
-        let responseGameInformation = new ResponseGameInformation(game);
-        socket.emit(responseGameInformation.type, responseGameInformation);
-    }
+    socket.emit(responseCategoryList.type, responseCategoryList);
 }
 
 /* Event handler for communication-protocol GameStart */

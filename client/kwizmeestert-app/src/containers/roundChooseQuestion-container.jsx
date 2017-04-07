@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Switch from 'react-bootstrap-switch';
-import { onRoundQuestionsReceived, onQuestionSelect } from '../actions/on-round';
+import { onRoundInformationReceived, onQuestionSelect } from '../actions/on-round';
 
 const { RequestRoundInformation, ResponseRoundInformation, ChooseQuestion } = require('../../../../utilities/DAL/communication-protocol/');
 
@@ -18,7 +18,7 @@ class RoundChooseQuestions extends Component {
         let requestRoundInformation = new RequestRoundInformation(this.props.game.name, this.props.game.rounds.length);
 
         this.props.socket.on(new ResponseRoundInformation().type, (responseRoundInformation) => {
-            this.props.onRoundQuestionsReceived(responseRoundInformation.round.questions);
+            this.props.onRoundInformationReceived(responseRoundInformation.round);
             this.props.socket.off(responseRoundInformation.type);
         });
 
@@ -27,7 +27,7 @@ class RoundChooseQuestions extends Component {
 
     onQuestionStateChange(element, id, state) {
         if (state) {
-             if (this.props.selectedQuestion === undefined) {
+             if (this.props.selectedQuestion === null) {
                 this.props.onQuestionSelect(id);
              } 
              else {
@@ -36,14 +36,14 @@ class RoundChooseQuestions extends Component {
         }
         else {
             if (this.props.selectedQuestion === id) {
-                this.props.onQuestionSelect(undefined);
+                this.props.onQuestionSelect(null);
             }
         }
     }
 
     onQuestionSubmit() {
         if (this.props.selectedQuestion !== undefined) {
-            let chooseQuestion = new ChooseQuestion(this.props.game.name, this.props.game.rounds.length, this.props.selectedQuestion);
+            let chooseQuestion = new ChooseQuestion(this.props.game.name, this.props.round.number, this.props.selectedQuestion);
             this.props.socket.emit(chooseQuestion.type, chooseQuestion);
 
             this.context.router.push('/rateTeamAnswers');
@@ -77,7 +77,7 @@ class RoundChooseQuestions extends Component {
                             }
                     </tbody>
                 </table>
-                <input type="button" className="btn btn-primary pull-right" value="Start" disabled={this.props.selectedQuestion === undefined} onClick={(e) => {
+                <input type="button" className="btn btn-primary pull-right" value="Start" disabled={this.props.selectedQuestion === null} onClick={(e) => {
                     e.preventDefault();
                     this.onQuestionSubmit();
                 }} />
@@ -89,7 +89,7 @@ class RoundChooseQuestions extends Component {
 function matchDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            onRoundQuestionsReceived: onRoundQuestionsReceived,
+            onRoundInformationReceived: onRoundInformationReceived,
             onQuestionSelect: onQuestionSelect,
         }, dispatch);
 }
@@ -98,8 +98,9 @@ function mapStateToProps(state) {
     return {
         socket: state.socketStore.socket,
         game: state.gameStore.game,
+        round: state.roundStore.round,
 
-        availableQuestions: state.roundStore.availableQuestions,
+        availableQuestions: state.roundStore.round === undefined ? [] : state.roundStore.round.questions, // -answeredQuestions
         selectedQuestion: state.roundStore.selectedQuestion,
     };
 }

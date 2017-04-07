@@ -39,10 +39,6 @@
                 socket.emit('GameStart', { gameId: "test-game" });
             }
 
-            function registerTeam() {
-                socket.emit('RegisterTeam', { gameId: "test-game", name: "test-team" });
-            }
-
             socket.on('ResponseCategoryList', function(data) {
                 console.log(data);
             });
@@ -59,6 +55,10 @@
                 console.log(data);
             });
 
+            socket.on('ResponseTeamAnswer', function(data) {
+                console.log(data);
+            });
+
         </script>
     </head>
     <body>
@@ -69,7 +69,6 @@
         <button id="requestRoundInformation" type="button" onclick="requestRoundInformation()">requestRoundInformation</button>
         <button id="rateTeamRegistration" type="button" onclick="rateTeamRegistration()">rateTeamRegistration</button>
         <button id="gameStart" type="button" onclick="gameStart()">gameStart</button>
-        <button id="registerTeam" type="button" onclick="registerTeam()">registerTeam</button>
         <button id="requestCategoryList" type="button" onclick="requestCategoryList()">requestCategoryList</button>
         <button id="chooseCategories" type="button" onclick="chooseCategories()">chooseCategories</button>
     </body>

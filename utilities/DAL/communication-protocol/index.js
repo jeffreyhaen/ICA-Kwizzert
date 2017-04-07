@@ -17,6 +17,7 @@ module.exports.RequestTeamGameInformation = require('./requestTeamGameInformatio
 module.exports.ResponseTeamGameInformation = require('./responseTeamGameInformation');
 module.exports.RequestCategoryList = require('./requestCategoryList');
 module.exports.ResponseCategoryList = require('./responseCategoryList');
+module.exports.ResponseTeamAnswer = require('./responseTeamAnswer');
 module.exports.GameStart = require('./gameStart');
 module.exports.GameStop = require('./gameStop');
 module.exports.RoundStart = require('./roundStart');

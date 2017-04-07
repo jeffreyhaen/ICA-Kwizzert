@@ -7,14 +7,19 @@
 
             socket.emit('RegisterClient', { clientType: 'Team-app' });
 
+            function registerTeam() {
+                socket.emit('RegisterTeam', { gameId: "test-game", name: "test-team" });
+            }
+
             function registerTeamAnswer() {
-                socket.emit('registerTeamAnswer', { name: 'test-team',  });
+                socket.emit('RegisterTeamAnswer', { gameId: 'test-game', teamId: 'test-team', questionId: 'test-question-1', value: 'test-answer-1' });
             }
 
         </script>
     </head>
     <body>
         <h2>Team-app</h2>   
+        <button id="registerTeam" type="button" onclick="registerTeam()">registerTeam</button>
         <button id="registerTeamAnswer" type="button" onclick="registerTeamAnswer()">registerTeamAnswer</button>
     </body>
 </html>

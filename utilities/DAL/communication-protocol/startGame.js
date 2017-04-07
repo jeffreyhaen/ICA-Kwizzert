@@ -1,10 +1,10 @@
 
 /* Used to start the given game. */
-class GameStart {
+class StartGame {
     constructor(gameId) {
-        this.type = "GameStart";
+        this.type = "StartGame";
         this.gameId = gameId;
     }
 }
 
-module.exports = GameStart;
+module.exports = StartGame;

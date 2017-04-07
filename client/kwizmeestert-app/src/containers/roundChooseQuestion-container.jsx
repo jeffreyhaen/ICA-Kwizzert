@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Switch from 'react-bootstrap-switch';
 import { onRoundInformationReceived, onQuestionSelect } from '../actions/on-round';
 
-const { RequestRoundInformation, ResponseRoundInformation, ChooseQuestion } = require('../../../../utilities/DAL/communication-protocol/');
+const { RequestRoundInformation, ResponseRoundInformation, StartQuestion } = require('../../../../utilities/DAL/communication-protocol/');
 
 class RoundChooseQuestions extends Component {
     constructor(props) {
@@ -43,8 +43,8 @@ class RoundChooseQuestions extends Component {
 
     onQuestionSubmit() {
         if (this.props.selectedQuestion !== undefined) {
-            let chooseQuestion = new ChooseQuestion(this.props.game.name, this.props.round.number, this.props.selectedQuestion);
-            this.props.socket.emit(chooseQuestion.type, chooseQuestion);
+            let startQuestion = new StartQuestion(this.props.game.name, this.props.round.number, this.props.selectedQuestion);
+            this.props.socket.emit(startQuestion.type, startQuestion);
 
             this.context.router.push('/rateTeamAnswers');
         }

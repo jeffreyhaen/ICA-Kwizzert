@@ -1,7 +1,8 @@
 
 module.exports.CreateGame = require('./createGame');
 module.exports.ChooseCategories = require('./chooseCategories');
-module.exports.ChooseQuestion = require('./chooseQuestion');
+module.exports.StartQuestion = require('./startQuestion');
+module.exports.StopQuestion = require('./stopQuestion');
 module.exports.RegisterClient = require('./registerClient');
 module.exports.RegisterTeam = require('./registerTeam');
 module.exports.RegisterTeamAnswer = require('./registerTeamAnswer');
@@ -18,7 +19,7 @@ module.exports.ResponseTeamGameInformation = require('./responseTeamGameInformat
 module.exports.RequestCategoryList = require('./requestCategoryList');
 module.exports.ResponseCategoryList = require('./responseCategoryList');
 module.exports.ResponseTeamAnswer = require('./responseTeamAnswer');
-module.exports.GameStart = require('./gameStart');
-module.exports.GameStop = require('./gameStop');
-module.exports.RoundStart = require('./roundStart');
-module.exports.RoundStop = require('./roundStop');
+module.exports.StartGame = require('./startGame');
+module.exports.StopGame = require('./stopGame');
+module.exports.StartRound = require('./startRound');
+module.exports.StopRound = require('./stopRound');

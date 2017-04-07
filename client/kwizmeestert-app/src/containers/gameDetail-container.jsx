@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { onGameDetailsReceived } from '../actions/on-game';
 import Switch from 'react-bootstrap-switch';
 
-const { RequestGameInformation, ResponseGameInformation, GameStart, GameStop, RateTeamRegistration } = require('../../../../utilities/DAL/communication-protocol/');
+const { RequestGameInformation, ResponseGameInformation, StartGame, StopGame, RateTeamRegistration } = require('../../../../utilities/DAL/communication-protocol/');
 
 class GameDetailContainer extends Component {
     constructor(props) {
@@ -34,8 +34,8 @@ class GameDetailContainer extends Component {
     onGameStart(event) {
         event.preventDefault();
 
-        let gameStart = new GameStart(this.props.gameId);
-        this.props.socket.emit(gameStart.type, gameStart);
+        let startGame = new StartGame(this.props.gameId);
+        this.props.socket.emit(startGame.type, startGame);
 
         this.context.router.push('/chooseCategories');
     }
@@ -43,8 +43,8 @@ class GameDetailContainer extends Component {
     onGameStop(event) {
         event.preventDefault();
 
-        let gameStop = new GameStop(this.props.gameId);
-        this.props.socket.emit(gameStop.type, gameStop);
+        let stopGame = new StopGame(this.props.gameId);
+        this.props.socket.emit(stopGame.type, stopGame);
 
         this.reloadGame();
     }

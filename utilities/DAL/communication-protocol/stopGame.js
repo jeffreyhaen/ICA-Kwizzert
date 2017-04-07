@@ -1,10 +1,10 @@
 
 /* Used to stop the given game. */
-class GameStop {
+class StopGame {
     constructor(gameId) {
-        this.type = "GameStop";
+        this.type = "StopGame";
         this.gameId = gameId;
     }
 }
 
-module.exports = GameStop;
+module.exports = StopGame;

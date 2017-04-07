@@ -17,11 +17,10 @@ const { // Models...
 } = require('../utilities/DAL/models/');
 
 const { // Communication-protocol...
+    CreateGame,
     RegisterClient,
     RegisterTeam,
     RegisterTeamAnswer,
-    ChooseCategories,
-    ChooseQuestion,
     RequestCategoryList,
     ResponseCategoryList,
     RequestGameList,
@@ -33,9 +32,11 @@ const { // Communication-protocol...
     ResponseTeamAnswer,
     RateTeamAnswer,
     RateTeamRegistration,
-    CreateGame,
-    GameStart,
-    GameStop,
+    ChooseCategories,
+    StartQuestion,
+    StopQuestion,
+    StartGame,
+    StopGame,
 } = require('../utilities/DAL/communication-protocol/');
 
 server.listen(3001, function() {
@@ -43,20 +44,21 @@ server.listen(3001, function() {
 });
 
 const events = [
+    { type: new CreateGame().type, handler: onCreateGame },
     { type: new RegisterClient().type, handler: onRegisterClient },
     { type: new RegisterTeam().type, handler: onRegisterTeam },
     { type: new RegisterTeamAnswer().type, handler: onRegisterTeamAnswer },
-    { type: new ChooseCategories().type, handler: onChooseCategories },
-    { type: new ChooseQuestion().type, handler: onChooseQuestion },
     { type: new RequestCategoryList().type, handler: onRequestCategoryList },
     { type: new RequestGameList().type, handler: onRequestGameList },
     { type: new RequestGameInformation().type, handler: onRequestGameInformation },
     { type: new RequestRoundInformation().type, handler: onRequestRoundInformation },
     { type: new RateTeamAnswer().type, handler: onRateTeamAnswer },
     { type: new RateTeamRegistration().type, handler: onRateTeamRegistration },
-    { type: new CreateGame().type, handler: onCreateGame },
-    { type: new GameStart().type, handler: onGameStart },
-    { type: new GameStop().type, handler: onGameStop },
+    { type: new ChooseCategories().type, handler: onChooseCategories },
+    { type: new StartGame().type, handler: onGameStart },
+    { type: new StopGame().type, handler: onGameStop },
+    { type: new StartQuestion().type, handler: onStartQuestion },
+    { type: new StopQuestion().type, handler: onStopQuestion },
 ];
 
 var games = [];     // See model Game. Example: { name: "Gametest 1", rounds: [], teams: [] }.
@@ -99,9 +101,7 @@ function onCreateGame(socket, data) {
 
 /* Event handler for communication-protocol RequestGameList */
 function onRequestGameList(socket, data) {
-    ////let gameIds = games.map((game) => { return game.name; });
-    let responseGameList = new ResponseGameList(games);
-    
+    let responseGameList = new ResponseGameList(games);   
     socket.emit(responseGameList.type, responseGameList);
 }
 
@@ -141,7 +141,11 @@ function onRateTeamRegistration(socket, data) {
 
 /* Event handler for communication-protocol RateTeamAnswer */
 function onRateTeamAnswer(socket, data) {
-    // TODO: Implement...
+    let game = games.find((item) => item.name === data.gameId);
+    let round = game.rounds.find((item) => item.number === data.roundId);
+    let teamAnswer = round.currentQuestion.teamAnswers.find((item) => item.team.name === data.teamId && item.question.value === data.questionId);
+
+    teamAnswer.accepted = true;
 }
 
 /* Event handler for communication-protocol RequestCategoryList */
@@ -162,8 +166,8 @@ function onChooseCategories(socket, data) {
     game.rounds.push(round);
 }
 
-/* Event handler for communication-protocol ChooseQuestion */
-function onChooseQuestion(socket, data) {
+/* Event handler for communication-protocol StartQuestion */
+function onStartQuestion(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     let round = game.rounds.find((item) => item.number === data.roundId);
     let question = new Question(null, data.questionId, "test-answer-1"); // TODO: Get question from the database.
@@ -172,8 +176,13 @@ function onChooseQuestion(socket, data) {
 
     let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
     clientsToNotify.forEach((item, index) => {
-        //item.socket.emit(); // TODO: Create Response(NewQuestion).
+        //item.socket.emit(); // TODO: Create Response(NewQuestion) and let the scoreboard and teams know.
     });
+}
+
+/* Event handler for communication-protocol StopQuestion */
+function onStopQuestion(socket, data) {
+    // TODO: Implement...
 }
 
 /* Event handler for communication-protocol GameStart */

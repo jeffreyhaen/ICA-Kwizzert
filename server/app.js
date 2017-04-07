@@ -61,7 +61,7 @@ function onRegisterClient(socket, data) {
 
 /* Event handler for communication-protocol RegisterTeam */
 function onRegisterTeam(socket, data) {
-    let game = games.find((item) => item.compareKey(data.gameId));
+    let game = games.find((item) => item.name === data.gameId);
 
     if (game !== undefined) {
         let team = new Team(data.name);
@@ -83,7 +83,7 @@ function onCreateGame(socket, data) {
 
 /* Event handler for communication-protocol RequestGameList */
 function onRequestGameList(socket, data) {
-    ////let gameIds = games.map((game) => { return game.getKey(); });
+    ////let gameIds = games.map((game) => { return game.name; });
     let responseGameList = new ResponseGameList(games);
     
     socket.emit(responseGameList.type, responseGameList);
@@ -91,10 +91,10 @@ function onRequestGameList(socket, data) {
 
 /* Event handler for communication-protocol RateTeamRegistration */
 function onRateTeamRegistration(socket, data) {
-    let game = games.find((item) => item.compareKey(data.gameId));
+    let game = games.find((item) => item.name === data.gameId);
 
     if (game !== undefined) {
-        let team = game.teams.find((item) => item.compareKey(data.teamId));
+        let team = game.teams.find((item) => item.name === data.teamId);
 
         if (team !== undefined) {
             team.accepted = data.accepted;
@@ -104,17 +104,17 @@ function onRateTeamRegistration(socket, data) {
 
 /* Event handler for communication-protocol RequestGameTeams */
 function onRequestGameTeams(socket, data) {
-    let game = games.find((item) => item.compareKey(data.gameId));
+    let game = games.find((item) => item.name === data.gameId);
 
     if (game !== undefined) {
-        let responseGameTeams = new ResponseGameTeams(game.getKey(), game.teams);
+        let responseGameTeams = new ResponseGameTeams(game.name, game.teams);
         socket.emit(responseGameTeams.type, responseGameTeams);
     }
 }
 
 /* Event handler for communication-protocol GameStart */
 function onGameStart(socket, data) {
-    let game = games.find((item) => item.compareKey(data.gameId));
+    let game = games.find((item) => item.name === data.gameId);
     
     if (game !== undefined) {
         game.started = true;

@@ -20,7 +20,7 @@
             }
 
             function rateTeamRegistration() {
-                socket.emit('RateTeamRegistration', { });
+                socket.emit('RateTeamRegistration', { gameId: "test-game", teamId: "test-team", accepted: true });
             }
 
             function gameStart() {

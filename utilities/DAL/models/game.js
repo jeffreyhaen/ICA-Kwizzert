@@ -6,6 +6,14 @@ class Game {
         this.rounds = [];
         this.teams = [];
     }
+
+    getKey() {
+        return this.name;
+    }
+
+    compareKey(gameId) {
+        return this.name === gameId;
+    }
 };
 
 module.exports = Game;

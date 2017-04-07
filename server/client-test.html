@@ -16,7 +16,7 @@
             }
 
             function requestGameTeams() {
-                socket.emit('RequestGameTeams', { });
+                socket.emit('RequestGameTeams', { gameId: "test-game" });
             }
 
             function rateTeamRegistration() {
@@ -25,6 +25,10 @@
 
             function gameStart() {
                 socket.emit('GameStart', { gameId: "test-game" });
+            }
+
+            function registerTeam() {
+                socket.emit('RegisterTeam', { gameId: "test-game", name: "test-team" });
             }
 
             socket.on('ResponseGameList', function(data) {
@@ -42,5 +46,6 @@
         <button id="requestGameTeams" type="button" onclick="requestGameTeams()">requestGameTeams</button>
         <button id="rateTeamRegistration" type="button" onclick="rateTeamRegistration()">rateTeamRegistration</button>
         <button id="gameStart" type="button" onclick="gameStart()">gameStart</button>
+        <button id="registerTeam" type="button" onclick="registerTeam()">registerTeam</button>
     </body>
 </html>

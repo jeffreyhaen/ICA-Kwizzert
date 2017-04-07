@@ -7,6 +7,7 @@ const path = require('path');
 
 const { // Models...
     Game,
+    Team,
 } = require('../utilities/DAL/models/');
 
 const { // Communication-protocol...
@@ -60,26 +61,30 @@ function onRegisterClient(socket, data) {
 
 /* Event handler for communication-protocol RegisterTeam */
 function onRegisterTeam(socket, data) {
-    // if(socket == clients.first(socket && type == "team")) {
-    //     if (game.in(message.gameId))
-    //     {
-            
-    //     }
-    // }
+    let game = games.find((item) => item.compareKey(data.gameId));
+
+    if (game !== undefined) {
+        let team = new Team(data.name);
+        
+        if (team.name !== undefined && game.teams.filter((item) => item.name === newGame.name).length === 0) {
+            game.teams.push(team);
+            console.log(team);
+        }
+    }
 }
 
 /* Event handler for communication-protocol CreateGame */
 function onCreateGame(socket, data) {
     let newGame = new Game(data.name);
     
-    if (newGame.name !== undefined && games.filter((game) => game.name === newGame.name).length === 0) {
+    if (newGame.name !== undefined && games.filter((item) => item.name === newGame.name).length === 0) {
         games.push(newGame);
     }
 }
 
 /* Event handler for communication-protocol RequestGameList */
 function onRequestGameList(socket, data) {
-    let gameIds = games.map((game) => { return game.name; });
+    let gameIds = games.map((game) => { return game.getKey(); });
     let responseGameList = new ResponseGameList(gameIds);
     
     socket.emit(responseGameList.type, responseGameList);
@@ -87,10 +92,10 @@ function onRequestGameList(socket, data) {
 
 /* Event handler for communication-protocol RateTeamRegistration */
 function onRateTeamRegistration(socket, data) {
-    let game = games.find((item) => item.gameId === data.gameId);
+    let game = games.find((item) => item.compareKey(data.gameId));
 
     if (game !== undefined) {
-        let team = game.teams.find((item) => item.teamId === data.teamId);
+        let team = game.teams.find((item) => item.compareKey(data.teamId));
 
         if (team !== undefined) {
             team.accepted = data.accepted;
@@ -100,15 +105,17 @@ function onRateTeamRegistration(socket, data) {
 
 /* Event handler for communication-protocol RequestGameTeams */
 function onRequestGameTeams(socket, data) {
-    let game = games.find((item) => item.gameId === data.gameId);
-    let responseGameTeams = new ResponseGameTeams(game.id, game.teams);
+    let game = games.find((item) => item.compareKey(data.gameId));
 
-    socket.emit(responseGameTeams.type, responseGameTeams);
+    if (game !== undefined) {
+        let responseGameTeams = new ResponseGameTeams(game.getKey(), game.teams);
+        socket.emit(responseGameTeams.type, responseGameTeams);
+    }
 }
 
 /* Event handler for communication-protocol GameStart */
 function onGameStart(socket, data) {
-    let game = games.find((item) => item.gameId === data.gameId);
+    let game = games.find((item) => item.compareKey(data.gameId));
     
     if (game !== undefined) {
         game.started = true;

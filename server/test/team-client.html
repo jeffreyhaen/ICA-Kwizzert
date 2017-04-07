@@ -12,7 +12,7 @@
             }
 
             function registerTeamAnswer() {
-                socket.emit('RegisterTeamAnswer', { gameId: 'test-game', teamId: 'test-team', questionId: 'test-question-1', value: 'test-answer-1' });
+                socket.emit('RegisterTeamAnswer', { gameId: 'test-game', roundId: 1, teamId: 'test-team', questionId: 'test-question-1', value: 'test-answer-1' });
             }
 
         </script>

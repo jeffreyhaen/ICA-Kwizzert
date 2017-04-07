@@ -185,7 +185,7 @@ function onGameStart(socket, data) {
 }
 
 /* Event handler for communication-protocol GameStop */
-function onGameStop(socket, data) {
+function onGameStop(socket, data) { // TODO: Do we still need this event?
     let game = games.find((item) => item.name === data.gameId);
     
     if (game !== undefined) {
@@ -213,19 +213,26 @@ function onRegisterTeam(socket, data) {
 function onRegisterTeamAnswer(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     
+    console.log(game);
     if (game !== undefined) {
         let team = game.teams.find((item) => item.name === data.teamId);
 
+        console.log(team);
         if (team !== undefined) {
             let answer = new Answer(team, game.currentQuestion, data.value);
             let responseTeamAnswer = new ResponseTeamAnswer(answer);
+            let round = game.rounds.find((item) => item.number === data.roundId);
             let clientsToNotify = clients.filter((item) => item.clientType === constants.KWIZMEESTERT_APP); // TODO: Filter on clients that are bound to the current game.
             
-            // TODO: Save answer to somewhere?
+            console.log(round);
 
-            clientsToNotify.forEach((item, index) => {
-                item.socket.emit(responseTeamAnswer.type, responseTeamAnswer);
-            });
+            if (round !== undefined) {
+                round.currentQuestion.teamAnswers.push(answer);
+
+                clientsToNotify.forEach((item, index) => {
+                    item.socket.emit(responseTeamAnswer.type, responseTeamAnswer);
+                });
+            }
         }
     }
 }

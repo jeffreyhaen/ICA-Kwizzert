@@ -1,7 +1,7 @@
-export const onRoundQuestionsReceived = (questions) => {
+export const onRoundInformationReceived = (round) => {
     return {
-        type: "ON_ROUND_QUESTIONS_RECEIVED",
-        payload: { questions: questions},
+        type: "ON_ROUND_INFORMATION_RECEIVED",
+        payload: { round: round},
     }
 }
 
@@ -9,12 +9,5 @@ export const onQuestionSelect = (questionId) => {
     return {
         type: 'ON_ROUND_QUESTION_SELECT',
         payload: { questionId: questionId },
-    }
-}
-
-export const onRoundAnswersReceived = (answers) => {
-    return {
-        type: 'ON_ROUND_ANSWERS_RECEIVED',
-        payload: { answers: answers },
     }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { onRoundAnswersReceived } from '../actions/on-round';
+import { onRoundInformationReceived } from '../actions/on-round';
 import Switch from 'react-bootstrap-switch';
 
 const { RequestRoundInformation, ResponseRoundInformation, RateTeamAnswer } = require('../../../../utilities/DAL/communication-protocol/');
@@ -13,14 +13,18 @@ class RoundRateTeamAnswers extends Component {
     }
 
     reloadAnswers() {
-        let requestRoundInformation = new RequestRoundInformation(this.props.game.name, this.props.game.rounds.length);
+        let requestRoundInformation = new RequestRoundInformation(this.props.game.name, this.props.round.number);
 
         this.props.socket.on(new ResponseRoundInformation().type, (responseRoundInformation) => {
-            this.props.onRoundAnswersReceived(responseRoundInformation.round.answeredQuestions);
-            this.props.socket.off(responseRoundInformation.type);
+            console.log(responseRoundInformation)
+            this.props.onRoundInformationReceived(responseRoundInformation.round);
         });
 
         this.props.socket.emit(requestRoundInformation.type, requestRoundInformation);
+    }
+
+    componentWillUnmount() {
+        this.props.socket.off(new ResponseRoundInformation().type);
     }
 
     render() {
@@ -57,7 +61,7 @@ class RoundRateTeamAnswers extends Component {
 function matchDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            onGameDetailsReceived: onGameDetailsReceived,
+            onRoundInformationReceived: onRoundInformationReceived,
         }, dispatch);
 }
 
@@ -65,8 +69,9 @@ function mapStateToProps(state, props) {
     return {
         socket: state.socketStore.socket,
         game: state.gameStore.game,
-
-        answers: state.roundStore.answers,
+        
+        round: state.roundStore.round,
+        answers: state.roundStore.round.currentQuestion === null ? [] : state.roundStore.round.currentQuestion.teamAnswers,
     };
 }
 

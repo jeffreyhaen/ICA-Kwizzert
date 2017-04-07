@@ -151,7 +151,16 @@ function onChooseCategories(socket, data) {
 
 /* Event handler for communication-protocol ChooseQuestion */
 function onChooseQuestion(socket, data) {
-    // TODO: Implement...
+    let game = games.find((item) => item.name === data.gameId);
+    let round = game.rounds.find((item) => item.number === data.roundId);
+    let question = new Question(null, data.questionId); // TODO: Get question from the database.
+
+    round.currentQuestion = question;
+
+    let clientsToNotify = clients.filter((item) => item.clientType === "Team-app" ||  item.clientType === "Scoreboard-app"); // TODO: Filter on clients that are bound to the current game.
+    clientsToNotify.forEach((item, index) => {
+        //item.socket.emit(); // TODO: Create Response(NewQuestion).
+    });
 }
 
 /* Event handler for communication-protocol GameStart */

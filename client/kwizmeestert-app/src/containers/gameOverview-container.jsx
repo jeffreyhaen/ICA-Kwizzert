@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { onGameReceiveList } from '../actions/on-game';
+import GameDetailContainer from './gameDetail-container';
 
 const { RequestGameList, ResponseGameList, CreateGame } = require('../../../../utilities/DAL/communication-protocol/');
 
-class GameContainer extends Component {
+class GameOverviewContainer extends Component {
     constructor(props) {
         super(props);
         this.reloadGameList();
@@ -15,14 +17,14 @@ class GameContainer extends Component {
         let requestGameList = new RequestGameList();
 
         this.props.socket.on(new ResponseGameList().type, (responseGameList) => {
-            this.props.onGameReceiveList(responseGameList.gameIds);
+            this.props.onGameReceiveList(responseGameList.games);
             this.props.socket.off(responseGameList.type);
         });
 
         this.props.socket.emit(requestGameList.type, requestGameList);
     }
 
-    sendNewGame(event) {
+    onNewGame(event) {
         event.preventDefault();
 
         let createGame = new CreateGame(event.target.txtName.value);
@@ -38,19 +40,19 @@ class GameContainer extends Component {
                 <table className="table table-striped">
                     <thead>
                         <tr>
-                            <th>Id</th>
+                            <th>Game</th>
                             <th>Password</th>
                             <th>GoTo</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            this.props.gameList.map((gameId, index) => {
+                            this.props.gameList.map((game, index) => {
                                 return (
                                     <tr key={index}>
-                                        <td>{index}</td>
-                                        <td>{gameId}</td>
-                                        <td>LinkToGame</td>
+                                        <td>{game.name}</td>
+                                        <td>{game.name}</td>
+                                        <td><Link to={`/game/${game.name}`}>Detail</Link></td>
                                     </tr>
                                 )
                             })}
@@ -59,7 +61,7 @@ class GameContainer extends Component {
                 <br />
                 <p>Add new game:</p>
                 <form name="newGame" onSubmit={(e) => { 
-                    this.sendNewGame(e);
+                    this.onNewGame(e);
                     }}>
                     <div className="form-group">
                         <input type="text" className="form-control" name="txtName" />
@@ -85,4 +87,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(GameContainer);
+export default connect(mapStateToProps, matchDispatchToProps)(GameOverviewContainer);

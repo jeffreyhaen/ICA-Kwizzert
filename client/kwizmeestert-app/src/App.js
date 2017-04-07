@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 import logo from './logo.svg';
 import './App.css';
 
@@ -12,6 +13,7 @@ class App extends Component {
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>KwizMeestert</h2>
+          <Link to={"/games"}>Alle games</Link>{" | "} 
         </div>
         <div>
             <br />

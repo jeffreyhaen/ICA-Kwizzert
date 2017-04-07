@@ -4,3 +4,10 @@ export const onGameReceiveList = (gameList) => {
         payload: { gameList: gameList },
     }
 }
+
+export const onGameDetailsReceived = (game) => {
+    return {
+        type: 'ON_GAME_DETAILS_RECEIVED',
+        payload: { game: game },
+    }
+}

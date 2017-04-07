@@ -1,5 +1,10 @@
 const initialGameState = {
    gameList: [],
+   game: {
+       teams: [],
+       started: false,
+       name: "",
+   },
 };
 
 import update from 'immutability-helper';
@@ -14,12 +19,13 @@ export default function (state = initialGameState, action) {
             });
             
             break;
-        /*case 'ON_USER_LOGOUT':
+
+        case 'ON_GAME_DETAILS_RECEIVED':
             
             return update(state, 
             {
-                socket: { $set: undefined },
-            });*/
+                game: { $set: action.payload.game },
+            });
     }
     
     return state;

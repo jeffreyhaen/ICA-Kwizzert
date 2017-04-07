@@ -5,7 +5,9 @@ import './index.css';
 
 import kwizmeestertStore from './stores/kwizmeestertStore';
 
-import GameContainer from './containers/game-container';
+import GameOverviewContainer from './containers/gameOverview-container';
+import GameDetailContainer from './containers/gameDetail-container';
+import GameChooseCategories from './containers/gameChooseCategories';
 
 import { Route, Router, IndexRoute, browserHistory } from 'react-router';
 import {Provider} from 'react-redux';
@@ -14,8 +16,10 @@ ReactDOM.render(
   <Provider store={kwizmeestertStore}>
        <Router history={browserHistory}>
             <Route path="/" component={App}>
-                <IndexRoute component={GameContainer} />
-                <Route path="/game" component={GameContainer} />
+                <IndexRoute component={GameOverviewContainer} />
+                <Route path="/games" component={GameOverviewContainer} />
+                <Route path="/game/:gameId" component={GameDetailContainer} />
+                <Route path="/chooseCategories" component={GameChooseCategories} />
                 { /*
                 <Route path="/timeline" component={Timeline} />
                 <Route path="/profile/:userId" component={Profile} />

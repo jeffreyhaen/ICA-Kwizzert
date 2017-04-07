@@ -1,8 +1,8 @@
 
 /* Used to register an answer for the given question in the given game that has been put by a team. */
-class RegisterAnswer {
+class RegisterTeamAnswer {
     constructor(gameId, teamId, questionId, value) {
-        this.type = "RegisterAnswer";
+        this.type = "RegisterTeamAnswer";
         this.gameId = gameId;
         this.teamId = teamId;
         this.questionId = questionId;
@@ -10,4 +10,4 @@ class RegisterAnswer {
     }
 }
 
-module.exports = RegisterAnswer;
+module.exports = RegisterTeamAnswer;

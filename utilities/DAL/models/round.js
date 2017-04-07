@@ -1,8 +1,10 @@
 
 class Round {
-    constructor() {
-        this.questions = [];
-        this.answeredQuestions = [];
+    constructor(number, questions, answeredQuestions = [], currentQuestion = null) {
+        this.number = number;
+        this.questions = questions;
+        this.answeredQuestions = answeredQuestions;
+        this.currentQuestion = currentQuestion;
     }
 };
 

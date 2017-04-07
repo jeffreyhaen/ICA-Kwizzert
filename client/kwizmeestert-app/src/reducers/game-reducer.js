@@ -2,6 +2,7 @@ const initialGameState = {
    gameList: [],
    game: {
        teams: [],
+       rounds: [],
        started: false,
        name: "",
    },

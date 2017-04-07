@@ -14,12 +14,7 @@ export default function (state = initialSocketState, action) {
             });
 
             break;
-        /*case 'ON_USER_LOGOUT':
             
-            return update(state, 
-            {
-                socket: { $set: undefined },
-            });*/
     }
     
     return state;

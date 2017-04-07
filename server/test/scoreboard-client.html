@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+    <head>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js'></script>
+        <script>
+            var socket = io('http://localhost:3001');
+
+            socket.emit('RegisterClient', { clientType: 'Scoreboard-app' });
+
+        </script>
+    </head>
+    <body>
+        <h2>Scoreboard-app</h2>     
+    </body>
+</html>

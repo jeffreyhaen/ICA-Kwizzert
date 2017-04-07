@@ -3,15 +3,17 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { onSocketInitialize } from '../actions/on-socket';
 
-const { RegisterClient } = require('../../../../utilities/DAL/communication-protocol/');
 const io = require('socket.io-client');
+const constants = require('../../../../utilities/DAL/constants');
+const { RegisterClient } = require('../../../../utilities/DAL/communication-protocol/');
+
 
 class SocketContainer extends Component {
     constructor(props) {
         super(props);
 
         let socket = io('http://localhost:3001/');
-        let registerClient = new RegisterClient("kwizmeestert");
+        let registerClient = new RegisterClient(constants.KWIZMEESTERT_APP);
 
         socket.emit(registerClient.type, registerClient);
 

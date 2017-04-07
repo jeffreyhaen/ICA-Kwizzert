@@ -5,7 +5,7 @@
         <script>
             var socket = io('http://localhost:3001');
 
-            socket.emit('RegisterClient', { clientType: 'test-app' });
+            socket.emit('RegisterClient', { clientType: 'KwizMeestert-app' });
 
             function createGame() {
                 socket.emit('CreateGame', { name: 'test-game' });
@@ -58,9 +58,11 @@
             socket.on('ResponseRoundInformation', function(data) {
                 console.log(data);
             });
+
         </script>
     </head>
     <body>
+        <h2>KwizMeestert-app</h2>      
         <button id="createGame" type="button" onclick="createGame()">createGame</button>
         <button id="requestGameList" type="button" onclick="requestGameList()">requestGameList</button>
         <button id="requestGameInformation" type="button" onclick="requestGameInformation()">requestGameInformation</button>

@@ -1,10 +1,10 @@
 
 class Game {
-    constructor(name, started = false) {
+    constructor(name, started = false, rounds = [], teams = []) {
         this.name = name;
         this.started = started;
-        this.rounds = [];
-        this.teams = [];
+        this.rounds = rounds;
+        this.teams = teams;
     }
 };
 

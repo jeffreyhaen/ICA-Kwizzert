@@ -4,6 +4,7 @@ const app = require('express');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const path = require('path');
+const constants = require("../utilities/DAL/constants");
 
 const { // Models...
     Game,
@@ -11,23 +12,27 @@ const { // Models...
     Team,
     Category,
     Question,
+    Answer,
 } = require('../utilities/DAL/models/');
 
 const { // Communication-protocol...
-    RegisterClient, 
-    RegisterTeam, 
+    RegisterClient,
+    RegisterTeam,
+    RegisterTeamAnswer,
     ChooseCategories,
     ChooseQuestion,
     RequestCategoryList,
     ResponseCategoryList,
-    RequestGameList, 
+    RequestGameList,
     ResponseGameList,
     RequestGameInformation,
     ResponseGameInformation,
     RequestRoundInformation,
     ResponseRoundInformation,
+    ResponseTeamAnswer,
+    RateTeamAnswer,
     RateTeamRegistration,
-    CreateGame, 
+    CreateGame,
     GameStart,
     GameStop,
 } = require('../utilities/DAL/communication-protocol/');
@@ -39,12 +44,14 @@ server.listen(3001, function() {
 const events = [
     { type: new RegisterClient().type, handler: onRegisterClient },
     { type: new RegisterTeam().type, handler: onRegisterTeam },
+    { type: new RegisterTeamAnswer().type, handler: onRegisterTeamAnswer },
     { type: new ChooseCategories().type, handler: onChooseCategories },
     { type: new ChooseQuestion().type, handler: onChooseQuestion },
     { type: new RequestCategoryList().type, handler: onRequestCategoryList },
     { type: new RequestGameList().type, handler: onRequestGameList },
     { type: new RequestGameInformation().type, handler: onRequestGameInformation },
     { type: new RequestRoundInformation().type, handler: onRequestRoundInformation },
+    { type: new RateTeamAnswer().type, handler: onRateTeamAnswer },
     { type: new RateTeamRegistration().type, handler: onRateTeamRegistration },
     { type: new CreateGame().type, handler: onCreateGame },
     { type: new GameStart().type, handler: onGameStart },
@@ -54,10 +61,10 @@ const events = [
 var games = [];     // See model Game. Example: { name: "Gametest 1", rounds: [], teams: [] }.
 var clients = [];   // See communication-protocol RegisterClient. Example: { socket: mySocket, clientType: myClientType }.
 
-io.on('connection', (client) => {
+io.on('connection', (client) => { // TODO: Authorisation for every app on every socket event.
     events.forEach((event, index) => {
         client.on(event.type, function(data) {
-            console.log(`Event ${event.type} called by client ${client.id}.`);
+            console.log(`Event ${event.type} called by client ${client.id} (${clients.filter((item) => item.socket.id === client.id).map((item) => { return item.clientType; })}).`);
             try { event.handler(client, data); }
             catch(error) { console.log(error); }
         });
@@ -131,6 +138,11 @@ function onRateTeamRegistration(socket, data) {
     }
 }
 
+/* Event handler for communication-protocol RateTeamAnswer */
+function onRateTeamAnswer(socket, data) {
+    // TODO: Implement...
+}
+
 /* Event handler for communication-protocol RequestCategoryList */
 function onRequestCategoryList(socket, data) {
     let categories = [new Category('test-category-1'), new Category('test-category-2'), new Category('test-category-3'), new Category('test-category-4')]; // TODO: Implement database...
@@ -157,7 +169,7 @@ function onChooseQuestion(socket, data) {
 
     round.currentQuestion = question;
 
-    let clientsToNotify = clients.filter((item) => item.clientType === "Team-app" ||  item.clientType === "Scoreboard-app"); // TODO: Filter on clients that are bound to the current game.
+    let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
     clientsToNotify.forEach((item, index) => {
         //item.socket.emit(); // TODO: Create Response(NewQuestion).
     });
@@ -197,15 +209,23 @@ function onRegisterTeam(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol GameStop */
-function onRegisterAnswer(socket, data) {
+/* Event handler for communication-protocol RegisterTeamAnswer */
+function onRegisterTeamAnswer(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     
     if (game !== undefined) {
         let team = game.teams.find((item) => item.name === data.teamId);
 
         if (team !== undefined) {
-            // TODO: Register answer for the current question. Implement current question first...
+            let answer = new Answer(team, game.currentQuestion, data.value);
+            let responseTeamAnswer = new ResponseTeamAnswer(answer);
+            let clientsToNotify = clients.filter((item) => item.clientType === constants.KWIZMEESTERT_APP); // TODO: Filter on clients that are bound to the current game.
+            
+            // TODO: Save answer to somewhere?
+
+            clientsToNotify.forEach((item, index) => {
+                item.socket.emit(responseTeamAnswer.type, responseTeamAnswer);
+            });
         }
     }
 }

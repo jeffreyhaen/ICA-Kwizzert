@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js'></script>
+        <script>
+            var socket = io('http://localhost:3001');
+
+            socket.emit('RegisterClient', { clientType: 'Team-app' });
+
+            function registerTeamAnswer() {
+                socket.emit('registerTeamAnswer', { name: 'test-team',  });
+            }
+
+        </script>
+    </head>
+    <body>
+        <h2>Team-app</h2>   
+        <button id="registerTeamAnswer" type="button" onclick="registerTeamAnswer()">registerTeamAnswer</button>
+    </body>
+</html>

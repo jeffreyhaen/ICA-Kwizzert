@@ -1,5 +1,6 @@
 const initialRoundState = {
    availableQuestions: [],
+   answers: [],
    selectedQuestion: undefined,
 };
 
@@ -24,6 +25,13 @@ export default function (state = initialRoundState, action) {
             });
 
             break;
+
+        case 'ON_ROUND_ANSWERS_RECEIVED':
+
+            return update(state,
+            {
+                answers: { $set: action.payload.answers },
+            })
     }
     
     return state;

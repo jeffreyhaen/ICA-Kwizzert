@@ -111,12 +111,17 @@ function onRateTeamRegistration(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol GameStart */
+/* Event handler for communication-protocol RequestCategoryList */
 function onRequestCategoryList(socket, data) {
-    let categories = [new Category('test-category-1'), new Category('test-category-2'), new Category('test-category-3')]; // TODO: Implement database...
+    let categories = [new Category('test-category-1'), new Category('test-category-2'), new Category('test-category-3'), new Category('test-category-4')]; // TODO: Implement database...
     let responseCategoryList = new ResponseCategoryList(categories);
 
     socket.emit(responseCategoryList.type, responseCategoryList);
+}
+
+/* Event handler for communication-protocol ChooseCategories */
+function onRequestCategoryList(socket, data) {
+    
 }
 
 /* Event handler for communication-protocol GameStart */

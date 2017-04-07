@@ -66,9 +66,8 @@ function onRegisterTeam(socket, data) {
     if (game !== undefined) {
         let team = new Team(data.name);
         
-        if (team.name !== undefined && game.teams.filter((item) => item.name === newGame.name).length === 0) {
+        if (team.name !== undefined && game.teams.filter((item) => item.name === team.name).length === 0) {
             game.teams.push(team);
-            console.log(team);
         }
     }
 }
@@ -84,8 +83,8 @@ function onCreateGame(socket, data) {
 
 /* Event handler for communication-protocol RequestGameList */
 function onRequestGameList(socket, data) {
-    let gameIds = games.map((game) => { return game.getKey(); });
-    let responseGameList = new ResponseGameList(gameIds);
+    ////let gameIds = games.map((game) => { return game.getKey(); });
+    let responseGameList = new ResponseGameList(games);
     
     socket.emit(responseGameList.type, responseGameList);
 }

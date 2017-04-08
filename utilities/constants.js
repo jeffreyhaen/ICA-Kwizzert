@@ -6,6 +6,8 @@ function define(name, value) {
     });
 }
 
-define("KWIZMEESTERT_APP", "KwizMeestert-app");
-define("SCOREBOARD_APP", "Scoreboard-app");
-define("TEAM_APP", "Team-app");
+define('KWIZMEESTERT_APP', 'KwizMeestert-app');
+define('SCOREBOARD_APP', 'Scoreboard-app');
+define('TEAM_APP', 'Team-app');
+
+define('MONGODB_CONNECTIONSTRING', 'mongodb://localhost/kwizzert');

@@ -15,7 +15,7 @@ class RoundChooseQuestions extends Component {
 
     reloadQuestionList() {
 
-        let requestRoundInformation = new RequestRoundInformation(this.props.game.name, this.props.game.rounds.length);
+        let requestRoundInformation = new RequestRoundInformation(this.props.game.name, this.props.round.number);
 
         this.props.socket.on(new ResponseRoundInformation().type, (responseRoundInformation) => {
             this.props.onRoundInformationReceived(responseRoundInformation.round);

@@ -4,7 +4,8 @@ const app = require('express');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const path = require('path');
-const constants = require("../utilities/constants");
+const constants = require('../utilities/constants');
+const mongo = require('mongodb').MongoClient;
 
 const { // Models...
     Game,
@@ -39,8 +40,13 @@ const { // Communication-protocol...
     StopGame,
 } = require('../utilities/DAL/communication-protocol/');
 
-server.listen(3001, function() {
-    console.log("Kwizzert server listening on port 3001!");
+let db;
+
+mongo.connect(constants.MONGODB_CONNECTIONSTRING, function (err, database) {
+    db = database;
+    server.listen(constants.SERVER_PORT, function() {
+        console.log(`Kwizzert server listening on port ${constants.SERVER_PORT}!`);
+    });
 });
 
 const events = [
@@ -61,8 +67,8 @@ const events = [
     { type: new StopQuestion().type, handler: onStopQuestion },
 ];
 
-var games = [];     // See model Game. Example: { name: "Gametest 1", rounds: [], teams: [] }.
-var clients = [];   // See communication-protocol RegisterClient. Example: { socket: mySocket, clientType: myClientType }.
+let games = [];     // See model Game. Example: { name: "Gametest 1", rounds: [], teams: [] }.
+let clients = [];   // See communication-protocol RegisterClient. Example: { socket: mySocket, clientType: myClientType }.
 
 io.on('connection', (client) => { // TODO: Authorisation for every app on every socket event.
     events.forEach((event, index) => {
@@ -122,6 +128,7 @@ function onRequestRoundInformation(socket, data) {
     if (game !== undefined) {
         let round = game.rounds.find((item) => item.number === data.roundId);
         let responseRoundInformation = new ResponseRoundInformation(round);
+
         socket.emit(responseRoundInformation.type, responseRoundInformation);
     }
 }
@@ -150,33 +157,41 @@ function onRateTeamAnswer(socket, data) {
 
 /* Event handler for communication-protocol RequestCategoryList */
 function onRequestCategoryList(socket, data) {
-    let categories = [new Category('test-category-1'), new Category('test-category-2'), new Category('test-category-3'), new Category('test-category-4')]; // TODO: Implement database...
-    let responseCategoryList = new ResponseCategoryList(categories);
+     db.collection('questions').find().toArray(function (err, questions) {
+        let categories = Array.from(new Set(questions.map((question) => { return question.category.name; }))).map((item) => { return new Category(item); });
+        let responseCategoryList = new ResponseCategoryList(categories);
 
-    socket.emit(responseCategoryList.type, responseCategoryList);
+        socket.emit(responseCategoryList.type, responseCategoryList);
+    });
+    
 }
 
 /* Event handler for communication-protocol ChooseCategories */
 function onChooseCategories(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
-    let categories = data.categoryIds.map((item) => { return new Category(item); }); // TODO: Get Categories from database.
-    let questions = [new Question(categories[0], "test-vraag-1"), new Question(categories[1], "test-vraag-2"), new Question(categories[2], "test-vraag-3")]; // TODO: Get questions from database based on the categories...
-    let round = new Round((game.rounds.length + 1), questions);
 
-    game.rounds.push(round);
+    db.collection('questions').find({ 'category.name': { $in: data.categoryIds } }).toArray(function(err, filteredQuestions) {
+        let randomQuestions = filteredQuestions.sort(function() { return 0.5 - Math.random() } ).slice(0, constants.QUESTION_AMOUNT);
+        let round = new Round((game.rounds.length + 1), randomQuestions);
+        
+        game.rounds.push(round);
+    });
 }
 
 /* Event handler for communication-protocol StartQuestion */
 function onStartQuestion(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     let round = game.rounds.find((item) => item.number === data.roundId);
-    let question = new Question(null, data.questionId, "test-answer-1"); // TODO: Get question from the database.
 
-    round.currentQuestion = new PlayedQuestion(question);
+    db.collection('questions').findOne({ value: data.questionId }).toArray(function(err, filteredQuestion) { 
+        let question = new Question(new Category(filteredQuestion.category.name), filteredQuestion.value, filteredQuestion.answer);
 
-    let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
-    clientsToNotify.forEach((item, index) => {
-        //item.socket.emit(); // TODO: Create Response(NewQuestion) and let the scoreboard and teams know.
+        round.currentQuestion = new PlayedQuestion(question);
+
+        let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
+        clientsToNotify.forEach((item, index) => {
+            //item.socket.emit(); // TODO: Create Response(NewQuestion) and let the scoreboard and teams know.
+        });
     });
 }
 

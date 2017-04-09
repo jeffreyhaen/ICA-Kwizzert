@@ -242,6 +242,9 @@ function onRegisterTeam(socket, data) {
         
         if (team.name !== undefined && game.teams.filter((item) => item.name === team.name).length === 0) {
             game.teams.push(team);
+
+            let responseGameInformation = new ResponseGameInformation(game);
+            socket.emit(responseGameInformation.type, responseGameInformation);
         }
     }
 }

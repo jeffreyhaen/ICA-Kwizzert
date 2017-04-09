@@ -20,6 +20,7 @@ module.exports.ResponseTeamGameInformation = require('./responseTeamGameInformat
 module.exports.RequestCategoryList = require('./requestCategoryList');
 module.exports.ResponseCategoryList = require('./responseCategoryList');
 module.exports.ResponseTeamAnswer = require('./responseTeamAnswer');
+module.exports.ResponseNewQuestion = require('./responseNewQuestion');
 module.exports.StartGame = require('./startGame');
 module.exports.StopGame = require('./stopGame');
 module.exports.StartRound = require('./startRound');

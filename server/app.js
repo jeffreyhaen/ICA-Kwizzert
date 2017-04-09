@@ -31,6 +31,7 @@ const { // Communication-protocol...
     RequestRoundInformation,
     ResponseRoundInformation,
     ResponseTeamAnswer,
+    ResponseNewQuestion,
     RateTeamAnswer,
     RateTeamRegistration,
     ChooseCategories,
@@ -192,9 +193,10 @@ function onStartQuestion(socket, data) {
 
         round.currentQuestion = new PlayedQuestion(question, true);
 
+        let reponseNewQuestion = new ResponseNewQuestion(round.currentQuestion.question);
         let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
         clientsToNotify.forEach((item, index) => {
-            //item.socket.emit(); // TODO: Create Response(NewQuestion) and let the scoreboard and teams know.
+            item.socket.emit(reponseNewQuestion.type, reponseNewQuestion);
         });
     });
 }

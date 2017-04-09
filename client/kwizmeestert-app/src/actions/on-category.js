@@ -18,3 +18,9 @@ export const onCategoryDeselect = (categoryId) => {
         payload: { categoryId: categoryId },
     }
 }
+
+export const onCategoryClear = () => {
+    return {
+        type: 'ON_CATEGORY_CLEAR',
+    }
+}

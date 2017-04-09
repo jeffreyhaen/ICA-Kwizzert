@@ -57,13 +57,14 @@ class RoundChooseQuestions extends Component {
 
         this.props.socket.emit(stopRound.type, stopRound);
 
+        this.props.onQuestionSelect(null);
         this.context.router.push('/chooseCategories');
     }
 
     render() {
         return (
             <div className="container">
-                <h2>Ronde: {this.props.round.number} / Vraag: {this.props.answeredQuestions.length+1}</h2>
+                <h2>Ronde: {this.props.round.number} / Vraag: {this.props.answeredQuestions.length+1} van de {constants.ROUND_QUESTION_AMOUNT}</h2>
                 <table className="table table-striped">
                     <thead>
                         <tr>

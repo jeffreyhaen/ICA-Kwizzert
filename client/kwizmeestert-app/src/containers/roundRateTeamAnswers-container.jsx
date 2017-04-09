@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { onRoundInformationReceived } from '../actions/on-round';
 import Switch from 'react-bootstrap-switch';
 
-const { RequestRoundInformation, ResponseRoundInformation, RateTeamAnswer, StopQuestion, CloseQuestion } = require('../../../../utilities/DAL/communication-protocol/');
+const { RequestRoundInformation, ResponseRoundInformation, RateTeamAnswer, StopQuestion, CloseQuestion, StopRound } = require('../../../../utilities/DAL/communication-protocol/');
+const constants = require('../../../../utilities/constants.js')
 
 class RoundRateTeamAnswers extends Component {
     constructor(props) {
@@ -34,10 +35,19 @@ class RoundRateTeamAnswers extends Component {
 
     onStopQuestion() {
         let stopQuestion = new StopQuestion(this.props.game.name, this.props.round.number);
-
         this.props.socket.emit(stopQuestion.type, stopQuestion);
 
-        this.context.router.push('/chooseQuestion');
+        if(this.props.answeredQuestions.length >= constants.ROUND_QUESTION_AMOUNT - 1)
+        {
+            let stopRound = new StopRound(this.props.game.name, this.props.round.number);
+            this.props.socket.emit(stopRound.type, stopRound);
+
+            this.context.router.push('/chooseCategories');
+        }
+        else
+        {
+            this.context.router.push('/chooseQuestion');
+        }
     }
 
     onTeamRateAnswer(teamId, questionId, state) {
@@ -51,7 +61,7 @@ class RoundRateTeamAnswers extends Component {
     render() {
         return (
             <div className="container">
-                <h2>Ronde: {this.props.round.number} / Vraag: {this.props.answeredQuestions.length+1}</h2>
+                <h2>Ronde: {this.props.round.number} / Vraag: {this.props.answeredQuestions.length+1} van de {constants.ROUND_QUESTION_AMOUNT}</h2>
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -81,7 +91,7 @@ class RoundRateTeamAnswers extends Component {
                     disabled={ !this.props.round.currentQuestion || !this.props.round.currentQuestion.open }
                     onClick={ () => {
                             this.onCloseQuestion();
-                    }} />
+                    }} />{" "}
                     <input type="button" className="btn btn-primary" value="Volgende vraag"
                     disabled={ !this.props.round.currentQuestion || (this.props.round.currentQuestion.open && this.props.answers.filter((answer) => answer.accepted === undefined).length === 0) }
                     onClick={ () => {

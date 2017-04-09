@@ -3,10 +3,7 @@ const initialRoundState = {
         number: 0,
         questions: [],
         answeredQuestions: [],
-        currentQuestion: {
-            open: true,
-            teamAnswers: [],
-        },
+        currentQuestion: null,
    },
    answers: [],
    selectedQuestion: null,
@@ -21,15 +18,6 @@ export default function (state = initialRoundState, action) {
             return update(state, 
             {
                 round: { $set: action.payload.round },
-            });
-
-            break;
-
-        case 'ON_ROUND_QUESTION_SELECT':
-
-            return update(state, 
-            {
-                selectedQuestion: { $set: action.payload.questionId },
             });
 
             break;

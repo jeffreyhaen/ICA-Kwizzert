@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Switch from 'react-bootstrap-switch';
-import { onCategoriesReceived, onCategorySelect, onCategoryDeselect } from '../actions/on-category';
+import { onCategoriesReceived, onCategorySelect, onCategoryDeselect, onCategoryClear } from '../actions/on-category';
 import { onRoundInformationReceived } from '../actions/on-round';
 
 const { RequestCategoryList, ResponseCategoryList, ChooseCategories, ResponseRoundInformation } = require('../../../../utilities/DAL/communication-protocol/');
@@ -43,14 +43,16 @@ class GameChooseCategories extends Component {
     onCategoriesSubmit() {
         if (this.props.selectedCategories.length === constants.CATEGORIES_AMOUNT) {
 
+            let chooseCategories = new ChooseCategories(this.props.game.name, this.props.selectedCategories);
+
             this.props.socket.on(new ResponseRoundInformation().type, (responseRoundInformation) => {
                 this.props.onRoundInformationReceived(responseRoundInformation.round);
+                this.props.onCategoryClear();
                 this.props.socket.off(responseRoundInformation.type);
 
                 this.context.router.push('/chooseQuestion');
             });
 
-            let chooseCategories = new ChooseCategories(this.props.game.name, this.props.selectedCategories);
             this.props.socket.emit(chooseCategories.type, chooseCategories);
         }
     }
@@ -59,7 +61,7 @@ class GameChooseCategories extends Component {
         console.log(this.props.game);
         return (
             <div className="container">
-                <h2>Nieuwe ronde starten ( {this.props.game.rounds.length+1} ):</h2>
+                <h2>Nieuwe ronde starten ( {this.props.round.number  + 1} ):</h2>
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -97,6 +99,7 @@ function matchDispatchToProps(dispatch) {
             onCategoriesReceived: onCategoriesReceived,
             onCategoryDeselect: onCategoryDeselect,
             onCategorySelect: onCategorySelect,
+            onCategoryClear: onCategoryClear,
 
             onRoundInformationReceived: onRoundInformationReceived,
         }, dispatch);
@@ -106,6 +109,7 @@ function mapStateToProps(state) {
     return {
         socket: state.socketStore.socket,
         game: state.gameStore.game,
+        round: state.roundStore.round,
 
         categories: state.categoryStore.categories,
         selectedCategories: state.categoryStore.selectedCategories,

@@ -36,6 +36,14 @@ export default function (state = initialCategoryState, action) {
             });
 
             break;
+        
+        case 'ON_CATEGORY_CLEAR':
+
+            return update(state, {
+                selectedCategories: {
+                    $set: []
+                }
+            });
     }
 
     return state;

@@ -3,6 +3,8 @@ import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
+import { onTeamNameSet } from '../actions/on-team';
+
 const { RegisterTeam } = require('../../../../utilities/DAL/communication-protocol/');
 
 class GameRegisterContainer extends Component {
@@ -13,8 +15,9 @@ class GameRegisterContainer extends Component {
 
     onRegisterTeam(teamName) {
         let registerTeam = new RegisterTeam(this.props.game.name, teamName);
+        this.props.socket.emit(registerTeam.type, registerTeam);
 
-        this.props.socket.emit(registerTeam);
+        this.props.onTeamNameSet(teamName);
 
         this.context.router.push('/question');
     }
@@ -41,6 +44,7 @@ class GameRegisterContainer extends Component {
 function matchDispatchToProps(dispatch) {
     return bindActionCreators(
         {
+            onTeamNameSet: onTeamNameSet,
         }, dispatch);
 }
 

@@ -62,8 +62,8 @@ const events = [
     { type: new RateTeamAnswer().type, handler: onRateTeamAnswer },
     { type: new RateTeamRegistration().type, handler: onRateTeamRegistration },
     { type: new ChooseCategories().type, handler: onChooseCategories },
-    { type: new StartGame().type, handler: onGameStart },
-    { type: new StopGame().type, handler: onGameStop },
+    { type: new StartGame().type, handler: onStartGame },
+    { type: new StopGame().type, handler: onStopGame },
     { type: new StartQuestion().type, handler: onStartQuestion },
     { type: new StopQuestion().type, handler: onStopQuestion },
     { type: new CloseQuestion().type, handler: onCloseQuestion },
@@ -154,7 +154,7 @@ function onRateTeamAnswer(socket, data) {
     let round = game.rounds.find((item) => item.number === data.roundId);
     let teamAnswer = round.currentQuestion.teamAnswers.find((item) => item.team.name === data.teamId && item.question.value === data.questionId);
 
-    teamAnswer.accepted = true;
+    teamAnswer.accepted = data.accepted;
 }
 
 /* Event handler for communication-protocol RequestCategoryList */
@@ -165,7 +165,6 @@ function onRequestCategoryList(socket, data) {
 
         socket.emit(responseCategoryList.type, responseCategoryList);
     });
-    
 }
 
 /* Event handler for communication-protocol ChooseCategories */
@@ -173,7 +172,7 @@ function onChooseCategories(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
 
     db.collection('questions').find({ 'category.name': { $in: data.categoryIds } }).toArray(function(err, filteredQuestions) {
-        let randomQuestions = filteredQuestions.sort(function() { return 0.5 - Math.random() } ).slice(0, constants.QUESTION_AMOUNT);
+        let randomQuestions = filteredQuestions.sort((item) => { return 0.5 - Math.random(); }).slice(0, constants.QUESTION_AMOUNT);
         let round = new Round((game.rounds.length + 1), randomQuestions);
         
         game.rounds.push(round);
@@ -188,7 +187,7 @@ function onStartQuestion(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     let round = game.rounds.find((item) => item.number === data.roundId);
 
-    db.collection('questions').findOne({ value: data.questionId }, function(err, filteredQuestion) { 
+    db.collection('questions').findOne({ value: data.questionId }, function(err, filteredQuestion) {
         let question = new Question(new Category(filteredQuestion.category.name), filteredQuestion.value, filteredQuestion.answer);
 
         round.currentQuestion = new PlayedQuestion(question, true);
@@ -229,8 +228,31 @@ function onCloseQuestion(socket, data) {
     });
 }
 
-/* Event handler for communication-protocol GameStart */
-function onGameStart(socket, data) {
+/* Event handler for communication-protocol StopRound */
+function onStopRound(socket, data) {
+    let game = games.find((item) => item.name === data.gameId);
+    let round = game.rounds.find((item) => item.number === data.roundId);
+    let points = [];
+
+    game.teams.forEach((team) => {
+        let teamPoints = { team: team, correctAnswers: 0 };
+
+        round.answeredQuestions.map((answeredQuestion) => {
+            let answer = answeredQuestion.teamAnswers.filter((teamAnswer) => teamAnswer.team.name === team.name)[0];
+            
+            if (answer.accepted === true) {
+                teamPoints.correctAnswers++;
+            }
+        });
+
+        points.push(teamPoints);
+    });
+
+    console.log(points); // TODO: Add points to teams!
+}
+
+/* Event handler for communication-protocol StartGame */
+function onStartGame(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     
     if (game !== undefined) {
@@ -238,8 +260,8 @@ function onGameStart(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol GameStop */
-function onGameStop(socket, data) { // TODO: Do we still need this event?
+/* Event handler for communication-protocol StopGame */
+function onStopGame(socket, data) { // TODO: Do we still need this event?
     let game = games.find((item) => item.name === data.gameId);
     
     if (game !== undefined) {

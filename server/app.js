@@ -244,7 +244,11 @@ function onRegisterTeam(socket, data) {
             game.teams.push(team);
 
             let responseGameInformation = new ResponseGameInformation(game);
-            socket.emit(responseGameInformation.type, responseGameInformation);
+            let clientsToNotify = clients.filter((item) => item.clientType === constants.KWIZMEESTERT_APP); // TODO: Filter on clients that are bound to the current game.
+
+            clientsToNotify.forEach((item, index) => {
+                item.socket.emit(responseGameInformation.type, responseGameInformation);
+            });
         }
     }
 }

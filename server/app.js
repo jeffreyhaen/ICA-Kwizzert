@@ -301,7 +301,7 @@ function onRegisterTeamAnswer(socket, data) {
         let team = game.teams.find((item) => item.name === data.teamId);
         let round = game.rounds.find((item) => item.number === data.roundId);
 
-        if (team !== undefined && round !== undefined && round.currentQuestion !== null) {
+        if (team !== undefined && round !== undefined && round.currentQuestion !== null && round.currentQuestion.open === true) {
             let answer = new TeamAnswer(team, round.currentQuestion.question, data.value);
             round.currentQuestion.teamAnswers.push(answer);
 

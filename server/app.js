@@ -208,9 +208,10 @@ function onStopQuestion(socket, data) {
     round.answeredQuestions.push(round.currentQuestion);
     round.currentQuestion = null;
 
-    let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
+    let responseRoundInformation = new ResponseRoundInformation(round);
+    let clientsToNotify = clients.filter((item) => item.clientType === constants.KWIZMEESTERT_APP || item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
     clientsToNotify.forEach((item, index) => {
-        //item.socket.emit(); // TODO: Create Response(NewQuestion) and let the scoreboard and teams know.
+        item.socket.emit(responseRoundInformation.type, responseRoundInformation);
     });
 }
 

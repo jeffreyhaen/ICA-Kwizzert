@@ -175,6 +175,9 @@ function onChooseCategories(socket, data) {
         let round = new Round((game.rounds.length + 1), randomQuestions);
         
         game.rounds.push(round);
+
+        let responseRoundInformation = new ResponseRoundInformation(round);
+        socket.emit(responseRoundInformation.type, responseRoundInformation);
     });
 }
 

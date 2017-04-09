@@ -186,7 +186,7 @@ function onStartQuestion(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     let round = game.rounds.find((item) => item.number === data.roundId);
 
-    db.collection('questions').findOne({ value: data.questionId }).toArray(function(err, filteredQuestion) { 
+    db.collection('questions').findOne({ value: data.questionId }, function(err, filteredQuestion) { 
         let question = new Question(new Category(filteredQuestion.category.name), filteredQuestion.value, filteredQuestion.answer);
 
         round.currentQuestion = new PlayedQuestion(question);

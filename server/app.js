@@ -36,6 +36,7 @@ const { // Communication-protocol...
     ChooseCategories,
     StartQuestion,
     StopQuestion,
+    CloseQuestion,
     StartGame,
     StopGame,
 } = require('../utilities/DAL/communication-protocol/');
@@ -65,6 +66,7 @@ const events = [
     { type: new StopGame().type, handler: onGameStop },
     { type: new StartQuestion().type, handler: onStartQuestion },
     { type: new StopQuestion().type, handler: onStopQuestion },
+    { type: new CloseQuestion().type, handler: onCloseQuestion },
 ];
 
 let games = [];     // See model Game. Example: { name: "Gametest 1", rounds: [], teams: [] }.
@@ -189,7 +191,7 @@ function onStartQuestion(socket, data) {
     db.collection('questions').findOne({ value: data.questionId }, function(err, filteredQuestion) { 
         let question = new Question(new Category(filteredQuestion.category.name), filteredQuestion.value, filteredQuestion.answer);
 
-        round.currentQuestion = new PlayedQuestion(question);
+        round.currentQuestion = new PlayedQuestion(question, true);
 
         let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
         clientsToNotify.forEach((item, index) => {
@@ -205,6 +207,19 @@ function onStopQuestion(socket, data) {
 
     round.answeredQuestions.push(round.currentQuestion);
     round.currentQuestion = null;
+
+    let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
+    clientsToNotify.forEach((item, index) => {
+        //item.socket.emit(); // TODO: Create Response(NewQuestion) and let the scoreboard and teams know.
+    });
+}
+
+/* Event handler for communication-protocol CloseQuestion */
+function onCloseQuestion(socket, data) {
+    let game = games.find((item) => item.name === data.gameId);
+    let round = game.rounds.find((item) => item.number === data.roundId);
+
+    round.currentQuestion.open = false;
 
     let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
     clientsToNotify.forEach((item, index) => {

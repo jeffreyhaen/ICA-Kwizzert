@@ -3,6 +3,7 @@ module.exports.CreateGame = require('./createGame');
 module.exports.ChooseCategories = require('./chooseCategories');
 module.exports.StartQuestion = require('./startQuestion');
 module.exports.StopQuestion = require('./stopQuestion');
+module.exports.CloseQuestion = require('./closeQuestion');
 module.exports.RegisterClient = require('./registerClient');
 module.exports.RegisterTeam = require('./registerTeam');
 module.exports.RegisterTeamAnswer = require('./registerTeamAnswer');

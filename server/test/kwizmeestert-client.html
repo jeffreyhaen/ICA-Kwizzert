@@ -23,6 +23,10 @@
                 socket.emit('StartQuestion', { gameId: "test-game", roundId: 1, questionId: "test-question-1" });
             }
 
+            function closeQuestion() {
+                socket.emit('CloseQuestion', { gameId: "test-game", roundId: 1 });
+            }
+
             function stopQuestion() {
                 socket.emit('StopQuestion', { gameId: "test-game", roundId: 1 });
             }
@@ -76,6 +80,7 @@
         <button id="startGame" type="button" onclick="startGame()">startGame</button>
         <button id="chooseCategories" type="button" onclick="chooseCategories()">chooseCategories</button>
         <button id="startQuestion" type="button" onclick="startQuestion()">startQuestion</button>
+        <button id="closeQuestion" type="button" onclick="closeQuestion()">closeQuestion</button>
         <button id="stopQuestion" type="button" onclick="stopQuestion()">stopQuestion</button>
 
         <p>Requests:</p>

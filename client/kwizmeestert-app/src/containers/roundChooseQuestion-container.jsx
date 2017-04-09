@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import Switch from 'react-bootstrap-switch';
 import { onRoundInformationReceived, onQuestionSelect } from '../actions/on-round';
 
-const { RequestRoundInformation, ResponseRoundInformation, StartQuestion } = require('../../../../utilities/DAL/communication-protocol/');
+const { RequestRoundInformation, ResponseRoundInformation, StartQuestion, StopRound } = require('../../../../utilities/DAL/communication-protocol/');
+const constants = require('../../../../utilities/constants.js')
 
 class RoundChooseQuestions extends Component {
     constructor(props) {
@@ -46,13 +47,23 @@ class RoundChooseQuestions extends Component {
             let startQuestion = new StartQuestion(this.props.game.name, this.props.round.number, this.props.selectedQuestion);
             this.props.socket.emit(startQuestion.type, startQuestion);
 
+            this.props.onQuestionSelect(null);
             this.context.router.push('/rateTeamAnswers');
         }
+    }
+
+    onRoundStop() {
+        let stopRound = new StopRound(this.props.game.name, this.props.round.number);
+
+        this.props.socket.emit(stopRound.type, stopRound);
+
+        this.context.router.push('/chooseCategories');
     }
 
     render() {
         return (
             <div className="container">
+                <h2>Ronde: {this.props.round.number} / Vraag: {this.props.answeredQuestions.length+1}</h2>
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -77,10 +88,14 @@ class RoundChooseQuestions extends Component {
                             }
                     </tbody>
                 </table>
-                <input type="button" className="btn btn-primary pull-right" value="Start" disabled={this.props.selectedQuestion === null} onClick={(e) => {
-                    e.preventDefault();
-                    this.onQuestionSubmit();
-                }} />
+                <div className="pull-right">
+                    <input type="button" className="btn btn-primary" value="Start vraag" disabled={this.props.selectedQuestion === null} onClick={ () => {
+                        this.onQuestionSubmit();
+                    }} />{" "}
+                    <input type="button" className="btn btn-primary" value="Sluit ronde" onClick={ () => {
+                        this.onRoundStop();
+                    }} />
+                </div>
             </div>
         );
     }
@@ -100,7 +115,9 @@ function mapStateToProps(state) {
         game: state.gameStore.game,
         round: state.roundStore.round,
 
-        availableQuestions: state.roundStore.round === undefined ? [] : state.roundStore.round.questions, // -answeredQuestions
+        answeredQuestions: state.roundStore.round.answeredQuestions === undefined ? [] : state.roundStore.round.answeredQuestions,
+        availableQuestions: state.roundStore.round === undefined ? [] : 
+            state.roundStore.round.questions.filter((question) => state.roundStore.round.answeredQuestions.find((answeredQuestion) => question.value === answeredQuestion.question.value) === undefined),
         selectedQuestion: state.roundStore.selectedQuestion,
     };
 }

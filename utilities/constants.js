@@ -14,3 +14,6 @@ define('MONGODB_CONNECTIONSTRING', 'mongodb://localhost/kwizzert');
 define('SERVER_PORT', 3001);
 
 define('QUESTION_AMOUNT', 20);
+
+define('PLAYED_QUESTION_AMOUNT', 1); // 12
+define('CATEGORIES_AMOUNT', 3);

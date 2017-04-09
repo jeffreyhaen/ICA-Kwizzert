@@ -3,8 +3,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Switch from 'react-bootstrap-switch';
 import { onCategoriesReceived, onCategorySelect, onCategoryDeselect } from '../actions/on-category';
+import { onRoundInformationReceived } from '../actions/on-round';
 
-const { RequestCategoryList, ResponseCategoryList, ChooseCategories } = require('../../../../utilities/DAL/communication-protocol/');
+const { RequestCategoryList, ResponseCategoryList, ChooseCategories, ResponseRoundInformation } = require('../../../../utilities/DAL/communication-protocol/');
+const constants = require('../../../../utilities/constants.js')
 
 class GameChooseCategories extends Component {
     constructor(props) {
@@ -26,7 +28,7 @@ class GameChooseCategories extends Component {
 
     onCategoryStateChange(element, id, state) {
         if (state) {
-            if (this.props.selectedCategories.length >= 3) {
+            if (this.props.selectedCategories.length >= constants.CATEGORIES_AMOUNT) {
                 element.value(false);
             } 
             else {
@@ -39,18 +41,25 @@ class GameChooseCategories extends Component {
     }
 
     onCategoriesSubmit() {
-        if (this.props.selectedCategories.length === 3) {
-            let chooseCategories = new ChooseCategories(this.props.game.name, this.props.selectedCategories);
-            
-            this.props.socket.emit(chooseCategories.type, chooseCategories);
+        if (this.props.selectedCategories.length === constants.CATEGORIES_AMOUNT) {
 
-            this.context.router.push('/chooseQuestion');
+            this.props.socket.on(new ResponseRoundInformation().type, (responseRoundInformation) => {
+                this.props.onRoundInformationReceived(responseRoundInformation.round);
+                this.props.socket.off(responseRoundInformation.type);
+
+                this.context.router.push('/chooseQuestion');
+            });
+
+            let chooseCategories = new ChooseCategories(this.props.game.name, this.props.selectedCategories);
+            this.props.socket.emit(chooseCategories.type, chooseCategories);
         }
     }
 
     render() {
+        console.log(this.props.game);
         return (
             <div className="container">
+                <h2>Nieuwe ronde starten ( {this.props.game.rounds.length+1} ):</h2>
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -73,7 +82,7 @@ class GameChooseCategories extends Component {
                             }
                     </tbody>
                 </table>
-                <input type="button" className="btn btn-primary pull-right" value="Doorgaan" disabled={this.props.selectedCategories.length !== 3} onClick={(e) => {
+                <input type="button" className="btn btn-primary pull-right" value="Start ronde" disabled={this.props.selectedCategories.length !== constants.CATEGORIES_AMOUNT} onClick={(e) => {
                     e.preventDefault();
                     this.onCategoriesSubmit();
                 }} />
@@ -88,6 +97,8 @@ function matchDispatchToProps(dispatch) {
             onCategoriesReceived: onCategoriesReceived,
             onCategoryDeselect: onCategoryDeselect,
             onCategorySelect: onCategorySelect,
+
+            onRoundInformationReceived: onRoundInformationReceived,
         }, dispatch);
 }
 

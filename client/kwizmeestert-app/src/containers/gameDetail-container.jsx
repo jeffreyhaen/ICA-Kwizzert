@@ -17,10 +17,13 @@ class GameDetailContainer extends Component {
 
         this.props.socket.on(new ResponseGameInformation().type, (responseGameInformation) => {
             this.props.onGameDetailsReceived(responseGameInformation.game);
-            this.props.socket.off(responseGameInformation.type);
         });
 
         this.props.socket.emit(requestGameInformation.type, requestGameInformation);
+    }
+
+    componentWillUnmount() {
+        this.props.socket.off(new ResponseGameInformation().type);
     }
 
     onTeamRateRegistration(gameId, teamId, state) {

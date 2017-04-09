@@ -4,6 +4,7 @@ const initialRoundState = {
         questions: [],
         answeredQuestions: [],
         currentQuestion: {
+            open: true,
             teamAnswers: [],
         },
    },

@@ -115,7 +115,7 @@ function onRegisterToGame(socket, data) {
 
 /* ===== KwizMeester-app events ===== */
 
-/* Event handler for communication-protocol CreateGame */
+/* Event handler for communication-protocol CreateGame. */
 function onCreateGame(socket, data) {
     let newGame = new Game(data.name);
     
@@ -124,13 +124,13 @@ function onCreateGame(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol RequestGameList */
+/* Event handler for communication-protocol RequestGameList. */
 function onRequestGameList(socket, data) {
     let responseGameList = new ResponseGameList(games);
     socket.emit(responseGameList.type, responseGameList);
 }
 
-/* Event handler for communication-protocol RequestGameInformation */
+/* Event handler for communication-protocol RequestGameInformation. */
 function onRequestGameInformation(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
 
@@ -140,7 +140,7 @@ function onRequestGameInformation(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol RequestRoundInformation */
+/* Event handler for communication-protocol RequestRoundInformation. */
 function onRequestRoundInformation(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
 
@@ -152,7 +152,7 @@ function onRequestRoundInformation(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol RateTeamRegistration */
+/* Event handler for communication-protocol RateTeamRegistration. */
 function onRateTeamRegistration(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
 
@@ -165,7 +165,7 @@ function onRateTeamRegistration(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol RateTeamAnswer */
+/* Event handler for communication-protocol RateTeamAnswer. */
 function onRateTeamAnswer(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     let round = game.rounds.find((item) => item.number === data.roundId);
@@ -174,7 +174,7 @@ function onRateTeamAnswer(socket, data) {
     teamAnswer.accepted = data.accepted;
 }
 
-/* Event handler for communication-protocol RequestCategoryList */
+/* Event handler for communication-protocol RequestCategoryList. */
 function onRequestCategoryList(socket, data) {
      db.collection('questions').find().toArray(function (err, questions) {
         let categories = Array.from(new Set(questions.map((question) => { return question.category.name; }))).map((item) => { return new Category(item); });
@@ -184,7 +184,7 @@ function onRequestCategoryList(socket, data) {
     });
 }
 
-/* Event handler for communication-protocol ChooseCategories */
+/* Event handler for communication-protocol ChooseCategories. */
 function onChooseCategories(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
 
@@ -199,7 +199,7 @@ function onChooseCategories(socket, data) {
     });
 }
 
-/* Event handler for communication-protocol StartQuestion */
+/* Event handler for communication-protocol StartQuestion. */
 function onStartQuestion(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     let round = game.rounds.find((item) => item.number === data.roundId);
@@ -214,7 +214,7 @@ function onStartQuestion(socket, data) {
     });
 }
 
-/* Event handler for communication-protocol StopQuestion */
+/* Event handler for communication-protocol StopQuestion. */
 function onStopQuestion(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     let round = game.rounds.find((item) => item.number === data.roundId);
@@ -226,7 +226,7 @@ function onStopQuestion(socket, data) {
     notifyClientsFor(game, responseRoundInformation, [constants.KWIZMEESTERT_APP, constants.TEAM_APP, constants.SCOREBOARD_APP]);
 }
 
-/* Event handler for communication-protocol CloseQuestion */
+/* Event handler for communication-protocol CloseQuestion. */
 function onCloseQuestion(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     let round = game.rounds.find((item) => item.number === data.roundId);
@@ -237,7 +237,7 @@ function onCloseQuestion(socket, data) {
     notifyClientsFor(game, responseRoundInformation, [constants.KWIZMEESTERT_APP, constants.TEAM_APP, constants.SCOREBOARD_APP]);
 }
 
-/* Event handler for communication-protocol StopRound */
+/* Event handler for communication-protocol StopRound. */
 function onStopRound(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     let round = game.rounds.find((item) => item.number === data.roundId);
@@ -272,7 +272,7 @@ function onStopRound(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol StartGame */
+/* Event handler for communication-protocol StartGame. */
 function onStartGame(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     
@@ -281,7 +281,7 @@ function onStartGame(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol StopGame */
+/* Event handler for communication-protocol StopGame. */
 function onStopGame(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     
@@ -295,7 +295,7 @@ function onStopGame(socket, data) {
 
 /* ===== Team-app events ===== */
 
-/* Event handler for communication-protocol RegisterTeam */
+/* Event handler for communication-protocol RegisterTeam. */
 function onRegisterTeam(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
 
@@ -313,7 +313,7 @@ function onRegisterTeam(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol RegisterTeamAnswer */
+/* Event handler for communication-protocol RegisterTeamAnswer. */
 function onRegisterTeamAnswer(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
 
@@ -338,7 +338,7 @@ function onRegisterTeamAnswer(socket, data) {
     }
 }
 
-/* Event handler for communication-protocol RequestTeamInformation */
+/* Event handler for communication-protocol RequestTeamInformation. */
 function onRequestTeamInformation(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     let team = game.teams.find((item) => item.name === data.teamId);
@@ -347,6 +347,7 @@ function onRequestTeamInformation(socket, data) {
     socket.emit(responseTeamInformation.type, responseTeamInformation);
 }
 
+/* Method to notify connected clients with the given message. The clients has to be bound to the given game and must meet the client type requirement. */
 function notifyClientsFor(game, message, clientTypes) {
     let clientsToNotify = clients.filter((item) => item.currentGame !== null && item.currentGame.name === game.name && clientTypes.find((type) => type === item.clientType) !== undefined);
 

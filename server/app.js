@@ -161,6 +161,15 @@ function onRateTeamRegistration(socket, data) {
 
         if (team !== undefined) {
             team.accepted = data.accepted;
+
+            if (team.accepted === true) {
+                let responseGameInformation = new ResponseGameInformation(game);
+                notifyClientsFor(game, responseGameInformation, [constants.SCOREBOARD_APP]);
+            }
+            else {
+                var teamIndex = game.teams.indexOf(team);
+                game.teams.splice(teamIndex, 1);
+            }
         }
     }
 }

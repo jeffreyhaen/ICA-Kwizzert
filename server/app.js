@@ -162,14 +162,8 @@ function onRateTeamRegistration(socket, data) {
         if (team !== undefined) {
             team.accepted = data.accepted;
 
-            if (team.accepted === true) {
-                let responseGameInformation = new ResponseGameInformation(game);
-                notifyClientsFor(game, responseGameInformation, [constants.SCOREBOARD_APP]);
-            }
-            else {
-                var teamIndex = game.teams.indexOf(team);
-                game.teams.splice(teamIndex, 1);
-            }
+            let responseGameInformation = new ResponseGameInformation(game);
+            notifyClientsFor(game, responseGameInformation, [constants.SCOREBOARD_APP]);
         }
     }
 }
@@ -290,6 +284,14 @@ function onStartGame(socket, data) {
     
     if (game !== undefined) {
         game.started = true;
+
+        // Remove unaccepted teams from the game.
+        games.team.forEach((team) => {
+            if (team.accepted === false) {
+                var teamIndex = game.teams.indexOf(team);
+                game.teams.splice(teamIndex, 1);
+            }
+        });
 
         let responseGameInformation = new ResponseGameInformation(game);
         notifyClientsFor(game, responseGameInformation, [constants.SCOREBOARD_APP]);

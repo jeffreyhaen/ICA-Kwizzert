@@ -7,6 +7,7 @@ import scoreboardStore from './stores/scoreboardStore';
 
 import GameOverviewContainer from './containers/gameOverview-container';
 import GameScoreboardContainer from './containers/gameScoreboard-container';
+import GameEndedContainer from './containers/gameEnded-container';
 
 import { Route, Router, IndexRoute, browserHistory } from 'react-router';
 import {Provider} from 'react-redux';
@@ -18,6 +19,7 @@ ReactDOM.render(
                 <IndexRoute component={GameOverviewContainer} />
                 <Route path="/games" component={GameOverviewContainer} />
                 <Route path="/scoreboard" component={GameScoreboardContainer} />
+                <Route path="/end" component={GameEndedContainer} />
             </Route>
         </Router>
   </Provider>,

@@ -19,6 +19,10 @@ class GameScoreboardContainer extends Component {
     reloadGameInformation() {
         this.props.socket.on(new ResponseGameInformation().type, (responseGameInformation) => {
             this.props.onGameDetailsReceived(responseGameInformation.game);
+
+            if (responseGameInformation.game.started === false && responseGameInformation.game.rounds.length > 0) {
+                this.context.router.push('/end');
+            }
         });
     }
 
@@ -109,5 +113,9 @@ function mapStateToProps(state, props) {
         round: state.roundStore.round,
     };
 }
+
+GameScoreboardContainer.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 export default connect(mapStateToProps, matchDispatchToProps)(GameScoreboardContainer);

@@ -90,6 +90,7 @@ io.on('connection', (client) => { // TODO: Authorisation for every app on every 
     });
 });
 
+
 /* ===== Common events ===== */
 
 /* Event handler for communication-protocol RegisterClient. */
@@ -112,7 +113,7 @@ function onCreateGame(socket, data) {
 
 /* Event handler for communication-protocol RequestGameList */
 function onRequestGameList(socket, data) {
-    let responseGameList = new ResponseGameList(games);   
+    let responseGameList = new ResponseGameList(games);
     socket.emit(responseGameList.type, responseGameList);
 }
 
@@ -277,7 +278,7 @@ function onStartGame(socket, data) {
 }
 
 /* Event handler for communication-protocol StopGame */
-function onStopGame(socket, data) { // TODO: Do we still need this event?
+function onStopGame(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     
     if (game !== undefined) {
@@ -317,8 +318,15 @@ function onRegisterTeamAnswer(socket, data) {
         let round = game.rounds.find((item) => item.number === data.roundId);
 
         if (team !== undefined && round !== undefined && round.currentQuestion !== null && round.currentQuestion.open === true) {
-            let answer = new TeamAnswer(team, round.currentQuestion.question, data.value);
-            round.currentQuestion.teamAnswers.push(answer);
+            let existingAnswer = round.currentQuestion.teamAnswers.find((item) => item.team.name === team.name);
+            
+            if (existingAnswer === undefined) {
+                let answer = new TeamAnswer(team, round.currentQuestion.question, data.value);
+                round.currentQuestion.teamAnswers.push(answer);
+            }
+            else {
+                existingAnswer.value = data.value;
+            }
 
             let responseRoundInformation = new ResponseRoundInformation(round);
             let clientsToNotify = clients.filter((item) => item.clientType === constants.KWIZMEESTERT_APP); // TODO: Filter on clients that are bound to the current game.

@@ -41,8 +41,7 @@ class GameOverviewContainer extends Component {
                     <thead>
                         <tr>
                             <th>Game</th>
-                            <th>Password</th>
-                            <th>GoTo</th>
+                            <th>Gebruik</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,22 +50,21 @@ class GameOverviewContainer extends Component {
                                 return (
                                     <tr key={index}>
                                         <td>{game.name}</td>
-                                        <td>{game.name}</td>
-                                        <td><Link to={`/game/${game.name}`}>Detail</Link></td>
+                                        <td><Link to={`/game/${game.name}`}>Gebruik</Link></td>
                                     </tr>
                                 )
                             })}
                     </tbody>
                 </table>
                 <br />
-                <p>Add new game:</p>
+                <p>Nieuwe game toevoegen:</p>
                 <form name="newGame" onSubmit={(e) => { 
                     this.onNewGame(e);
                     }}>
                     <div className="form-group">
                         <input type="text" className="form-control" name="txtName" />
                     </div>
-                    <input type="submit" className="btn btn-primary" value="Add" />
+                    <input type="submit" className="btn btn-primary" value="Toevoegen" />
                 </form>
             </div>
         );

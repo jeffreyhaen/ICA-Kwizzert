@@ -94,6 +94,15 @@ io.on('connection', (client) => { // TODO: Authorisation for every app on every 
     });
 });
 
+/* Method to notify connected clients with the given message. The clients has to be bound to the given game and must meet the client type requirement. */
+function notifyClientsFor(game, message, clientTypes) {
+    let clientsToNotify = clients.filter((item) => item.currentGame !== null && item.currentGame.name === game.name && clientTypes.find((type) => type === item.clientType) !== undefined);
+
+    clientsToNotify.forEach((item, index) => {
+        item.socket.emit(message.type, message);
+    });
+}
+
 
 /* ===== Common events ===== */
 
@@ -119,7 +128,7 @@ function onRegisterToGame(socket, data) {
 function onCreateGame(socket, data) {
     let newGame = new Game(data.name);
     
-    if (newGame.name !== undefined && games.filter((item) => item.name === newGame.name).length === 0) {
+    if (newGame.name !== undefined && newGame.name !== "" && games.filter((item) => item.name === newGame.name).length === 0) {
         games.push(newGame);
     }
 }
@@ -190,9 +199,20 @@ function onRequestCategoryList(socket, data) {
 /* Event handler for communication-protocol ChooseCategories. */
 function onChooseCategories(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
+    let answeredQuestions = [];
+
+    // Get already answered questions that has to be filtered.
+    game.rounds.forEach((round) => { 
+        round.answeredQuestions.forEach((answeredQuestion) => {
+            answeredQuestions.push(answeredQuestion.question.value);
+        });
+    });
 
     db.collection('questions').find({ 'category.name': { $in: data.categoryIds } }).toArray(function(err, filteredQuestions) {
-        let randomQuestions = filteredQuestions.sort((item) => { return 0.5 - Math.random(); }).slice(0, constants.QUESTION_AMOUNT);
+        let randomQuestions = filteredQuestions
+            .filter((item) => answeredQuestions.find((answered) => answered === item.value) === undefined)
+            .sort((item) => { return 0.5 - Math.random(); })
+            .slice(0, constants.QUESTION_AMOUNT);
         let round = new Round((game.rounds.length + 1), randomQuestions);
         
         game.rounds.push(round);
@@ -286,7 +306,7 @@ function onStartGame(socket, data) {
         game.started = true;
 
         // Remove unaccepted teams from the game.
-        games.team.forEach((team) => {
+        game.teams.forEach((team) => {
             if (team.accepted === false) {
                 var teamIndex = game.teams.indexOf(team);
                 game.teams.splice(teamIndex, 1);
@@ -322,7 +342,7 @@ function onRegisterTeam(socket, data) {
     if (game !== undefined) {
         let team = new Team(data.name);
         
-        if (team.name !== undefined && game.teams.filter((item) => item.name === team.name).length === 0) {
+        if (team.name !== undefined && team.name !== "" && game.teams.filter((item) => item.name === team.name).length === 0) {
             game.teams.push(team);
 
             onRegisterToGame(socket, new RegisterToGame(game.name));
@@ -341,7 +361,7 @@ function onRegisterTeamAnswer(socket, data) {
         let team = game.teams.find((item) => item.name === data.teamId);
         let round = game.rounds.find((item) => item.number === data.roundId);
 
-        if (team !== undefined && round !== undefined && round.currentQuestion !== null && round.currentQuestion.open === true) {
+        if (team !== undefined && round !== undefined && data.value !== "" && round.currentQuestion !== null && round.currentQuestion.open === true) {
             let existingAnswer = round.currentQuestion.teamAnswers.find((item) => item.team.name === team.name);
             
             if (existingAnswer === undefined) {
@@ -365,13 +385,4 @@ function onRequestTeamInformation(socket, data) {
     let responseTeamInformation = new ResponseTeamInformation(team);
 
     socket.emit(responseTeamInformation.type, responseTeamInformation);
-}
-
-/* Method to notify connected clients with the given message. The clients has to be bound to the given game and must meet the client type requirement. */
-function notifyClientsFor(game, message, clientTypes) {
-    let clientsToNotify = clients.filter((item) => item.currentGame !== null && item.currentGame.name === game.name && clientTypes.find((type) => type === item.clientType) !== undefined);
-
-    clientsToNotify.forEach((item, index) => {
-        item.socket.emit(message.type, message);
-    });
 }

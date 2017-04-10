@@ -3,9 +3,9 @@ import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-import { onTeamNameSet } from '../actions/on-team';
+import { onTeamNameSet } from '../../actions/on-team';
 
-const { RegisterTeam } = require('../../../../utilities/DAL/communication-protocol/');
+const { RegisterTeam } = require('../../../../../utilities/DAL/communication-protocol/');
 
 class GameRegisterContainer extends Component {
     constructor(props) {

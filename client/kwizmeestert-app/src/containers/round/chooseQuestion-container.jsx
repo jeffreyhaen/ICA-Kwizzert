@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Switch from 'react-bootstrap-switch';
-import { onRoundInformationReceived, onQuestionSelect } from '../actions/on-round';
+import { onRoundInformationReceived, onQuestionSelect } from '../../actions/on-round';
 
-const { RequestRoundInformation, ResponseRoundInformation, StartQuestion, StopRound } = require('../../../../utilities/DAL/communication-protocol/');
-const constants = require('../../../../utilities/constants.js')
+const { RequestRoundInformation, ResponseRoundInformation, StartQuestion, StopRound } = require('../../../../../utilities/DAL/communication-protocol/');
+const constants = require('../../../../../utilities/constants.js')
 
 class RoundChooseQuestions extends Component {
     constructor(props) {

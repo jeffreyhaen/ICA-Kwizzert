@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { onGameDetailsReceived } from '../actions/on-game';
+import { onGameDetailsReceived } from '../../actions/on-game';
 import Switch from 'react-bootstrap-switch';
 
-const { RequestGameInformation, ResponseGameInformation, StartGame, StopGame, RateTeamRegistration, RegisterToGame } = require('../../../../utilities/DAL/communication-protocol/');
+const { RequestGameInformation, ResponseGameInformation, StartGame, StopGame, RateTeamRegistration, RegisterToGame } = require('../../../../../utilities/DAL/communication-protocol/');
 
 class GameDetailContainer extends Component {
     constructor(props) {

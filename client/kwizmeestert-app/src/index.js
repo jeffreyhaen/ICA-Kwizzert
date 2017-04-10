@@ -5,11 +5,11 @@ import './index.css';
 
 import kwizmeestertStore from './stores/kwizmeestertStore';
 
-import GameOverviewContainer from './containers/gameOverview-container';
-import GameDetailContainer from './containers/gameDetail-container';
-import GameChooseCategories from './containers/gameChooseCategories-container';
-import RoundChooseQuestion from './containers/roundChooseQuestion-container';
-import RoundRateTeamAnswers from './containers/roundRateTeamAnswers-container';
+import GameOverviewContainer from './containers/game/overview-container';
+import GameDetailContainer from './containers/game/detail-container';
+import GameChooseCategories from './containers/game/chooseCategories-container';
+import RoundChooseQuestion from './containers/round/chooseQuestion-container';
+import RoundRateTeamAnswers from './containers/round/rateTeamAnswers-container';
 
 import { Route, Router, IndexRoute, browserHistory } from 'react-router';
 import {Provider} from 'react-redux';

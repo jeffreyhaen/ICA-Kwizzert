@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import logo from './logo.svg';
 import './App.css';
 
-import SocketContainer from './containers/socket-container';
+import SocketContainer from './containers/socket/socket-container';
 
 class App extends Component {
   render() {

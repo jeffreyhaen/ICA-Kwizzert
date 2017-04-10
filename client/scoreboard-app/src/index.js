@@ -5,9 +5,9 @@ import './index.css';
 
 import scoreboardStore from './stores/scoreboardStore';
 
-import GameOverviewContainer from './containers/gameOverview-container';
-import GameScoreboardContainer from './containers/gameScoreboard-container';
-import GameEndedContainer from './containers/gameEnded-container';
+import GameOverviewContainer from './containers/game/overview-container';
+import GameScoreboardContainer from './containers/game/scoreboard-container';
+import GameEndedContainer from './containers/game/ended-container';
 
 import { Route, Router, IndexRoute, browserHistory } from 'react-router';
 import {Provider} from 'react-redux';

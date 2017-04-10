@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { onGameDetailsReceived } from '../actions/on-game';
-import { onRoundDetailsReceived } from '../actions/on-round';
+import { onGameDetailsReceived } from '../../actions/on-game';
+import { onRoundDetailsReceived } from '../../actions/on-round';
 
-const { RequestGameInformation, ResponseGameInformation, ResponseRoundInformation } = require('../../../../utilities/DAL/communication-protocol/');
+const { RequestGameInformation, ResponseGameInformation, ResponseRoundInformation } = require('../../../../../utilities/DAL/communication-protocol/');
 
-const constants = require('../../../../utilities/constants.js')
+const constants = require('../../../../../utilities/constants.js')
 
 class GameScoreboardContainer extends Component {
     constructor(props) {

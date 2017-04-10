@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { onGameReceiveList, onGameDetailsReceived } from '../actions/on-game';
+import { onGameReceiveList } from '../../actions/on-game'
+import GameDetailContainer from './detail-container';
 
-const { RequestGameList, ResponseGameList } = require('../../../../utilities/DAL/communication-protocol/');
+const { RequestGameList, ResponseGameList, CreateGame } = require('../../../../../utilities/DAL/communication-protocol/');
 
 class GameOverviewContainer extends Component {
     constructor(props) {
@@ -23,12 +24,14 @@ class GameOverviewContainer extends Component {
         this.props.socket.emit(requestGameList.type, requestGameList);
     }
 
-    onGameChoose(gameId) {
-        this.props.onGameDetailsReceived(this.props.gameList.find((game) => {
-            return game.name === gameId
-        }));
+    onNewGame(event) {
+        event.preventDefault();
 
-        this.context.router.push('/register');
+        let createGame = new CreateGame(event.target.txtName.value);
+        
+        this.props.socket.emit(createGame.type, createGame);
+
+        this.reloadGameList();
     }
 
     render() {
@@ -38,7 +41,7 @@ class GameOverviewContainer extends Component {
                     <thead>
                         <tr>
                             <th>Game</th>
-                            <th>Kies</th>
+                            <th>Gebruik</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,14 +50,22 @@ class GameOverviewContainer extends Component {
                                 return (
                                     <tr key={index}>
                                         <td>{game.name}</td>
-                                        <td><input type="button" className="btn btn-primary" value="Kies" disabled={game.started} onClick={() => {
-                                            this.onGameChoose(game.name);
-                                        }} /></td>
+                                        <td><Link to={`/game/${game.name}`}>Gebruik</Link></td>
                                     </tr>
                                 )
                             })}
                     </tbody>
                 </table>
+                <br />
+                <p>Nieuwe game toevoegen:</p>
+                <form name="newGame" onSubmit={(e) => { 
+                    this.onNewGame(e);
+                    }}>
+                    <div className="form-group">
+                        <input type="text" className="form-control" name="txtName" />
+                    </div>
+                    <input type="submit" className="btn btn-primary" value="Toevoegen" />
+                </form>
             </div>
         );
     }
@@ -64,7 +75,6 @@ function matchDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             onGameReceiveList: onGameReceiveList,
-            onGameDetailsReceived: onGameDetailsReceived,
         }, dispatch);
 }
 
@@ -74,9 +84,5 @@ function mapStateToProps(state) {
         gameList: state.gameStore.gameList,
     };
 }
-
-GameOverviewContainer.contextTypes = {
-  router: React.PropTypes.object.isRequired
-};
 
 export default connect(mapStateToProps, matchDispatchToProps)(GameOverviewContainer);

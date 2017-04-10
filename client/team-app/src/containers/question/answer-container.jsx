@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-import { onRoundInformationReceived } from '../actions/on-round';
-import { onTeamReceived } from '../actions/on-team';
-import QuestionStatsContainer from './question-stats-container';
+import { onRoundInformationReceived } from '../../actions/on-round';
+import { onTeamReceived } from '../../actions/on-team';
+import QuestionStatsContainer from './stats-container';
 
-const { RegisterTeamAnswer, ResponseRoundInformation, RequestTeamInformation, ResponseTeamInformation } = require('../../../../utilities/DAL/communication-protocol/');
+const { RegisterTeamAnswer, ResponseRoundInformation, RequestTeamInformation, ResponseTeamInformation } = require('../../../../../utilities/DAL/communication-protocol/');
 
-class QuestionContainer extends Component {
+class AnswerContainer extends Component {
     constructor(props) {
         super(props);
 
-        this.waitForTeamInformation();
-        this.waitForRoundInformation();
+        this.listenForTeamInformation();
+        this.listenForRoundInformation();
     }
 
-    waitForRoundInformation() {
+    listenForRoundInformation() {
         this.props.socket.on(new ResponseRoundInformation().type, (responseRoundInformation) => {
 
             let requestTeamInformation = new RequestTeamInformation(this.props.game.name, this.props.teamId);
@@ -27,7 +26,7 @@ class QuestionContainer extends Component {
         });
     }
 
-    waitForTeamInformation() {
+    listenForTeamInformation() {
         this.props.socket.on(new ResponseTeamInformation().type, (responseTeamInformation) => {
             this.props.onTeamReceived(responseTeamInformation.team);
         });
@@ -100,8 +99,8 @@ function mapStateToProps(state) {
     };
 }
 
-QuestionContainer.contextTypes = {
+AnswerContainer.contextTypes = {
     router: React.PropTypes.object.isRequired
 };
 
-export default connect(mapStateToProps, matchDispatchToProps)(QuestionContainer);
+export default connect(mapStateToProps, matchDispatchToProps)(AnswerContainer);

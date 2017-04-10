@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { onRoundInformationReceived } from '../actions/on-round';
+import { onRoundInformationReceived } from '../../actions/on-round';
 import Switch from 'react-bootstrap-switch';
 
-const { RequestRoundInformation, ResponseRoundInformation, RateTeamAnswer, StopQuestion, CloseQuestion, StopRound } = require('../../../../utilities/DAL/communication-protocol/');
-const constants = require('../../../../utilities/constants.js')
+const { RequestRoundInformation, ResponseRoundInformation, RateTeamAnswer, StopQuestion, CloseQuestion, StopRound } = require('../../../../../utilities/DAL/communication-protocol/');
+const constants = require('../../../../../utilities/constants.js')
 
 class RoundRateTeamAnswers extends Component {
     constructor(props) {

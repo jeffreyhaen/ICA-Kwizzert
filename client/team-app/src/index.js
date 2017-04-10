@@ -5,9 +5,9 @@ import './index.css';
 
 import teamStore from './stores/teamStore.js';
 
-import GameRegisterContainer from './containers/gameRegisterTeam-container';
-import GameOverviewContainer from './containers/gameOverview-container';
-import QuestionContainer from './containers/question-container';
+import GameRegisterContainer from './containers/game/registerTeam-container';
+import GameOverviewContainer from './containers/game/overview-container';
+import AnswerContainer from './containers/question/answer-container';
 
 import { Route, Router, IndexRoute, browserHistory } from 'react-router';
 import {Provider} from 'react-redux';
@@ -18,12 +18,7 @@ ReactDOM.render(
             <Route path="/" component={App}>
                 <IndexRoute component={GameOverviewContainer} />
                 <Route path="/register" component={GameRegisterContainer} />
-                <Route path="/question" component={QuestionContainer} />
-                { /*
-                <Route path="/timeline" component={Timeline} />
-                <Route path="/profile/:userId" component={Profile} />
-                <Route path="/newPost" component={NewPost} />
-                <Route path="/logout" component={Login} /> */ }
+                <Route path="/question" component={AnswerContainer} />
             </Route>
         </Router>
   </Provider>,

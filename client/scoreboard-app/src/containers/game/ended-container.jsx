@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-const constants = require('../../../../utilities/constants.js')
+const constants = require('../../../../../utilities/constants.js')
 
 class GameEndedContainer extends Component {
     constructor(props) {

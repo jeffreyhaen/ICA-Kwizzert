@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Switch from 'react-bootstrap-switch';
-import { onCategoriesReceived, onCategorySelect, onCategoryDeselect, onCategoryClear } from '../actions/on-category';
-import { onRoundInformationReceived } from '../actions/on-round';
+import { onCategoriesReceived, onCategorySelect, onCategoryDeselect, onCategoryClear } from '../../actions/on-category';
+import { onRoundInformationReceived } from '../../actions/on-round';
 
-const { RequestCategoryList, ResponseCategoryList, ChooseCategories, ResponseRoundInformation, StopGame } = require('../../../../utilities/DAL/communication-protocol/');
-const constants = require('../../../../utilities/constants.js')
+const { RequestCategoryList, ResponseCategoryList, ChooseCategories, ResponseRoundInformation, StopGame } = require('../../../../../utilities/DAL/communication-protocol/');
+const constants = require('../../../../../utilities/constants.js')
 
 class GameChooseCategories extends Component {
     constructor(props) {

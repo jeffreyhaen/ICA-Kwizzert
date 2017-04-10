@@ -12,12 +12,12 @@ Onderstaande punten zijn de criteria waar tijdens het assessment naar gekeken wo
 | Rondes                                   |  X              |
 | Vragen: open, korte antwoorden           |  X              |
 | Categorieën                              |  X              |
-| Meestert-app, Team-app, Scorebord-app    |                 |
+| Meestert-app, Team-app, Scorebord-app    |  X               |
 | Kwizavond starten, teams melden aan met naam en ww, acceptatie door master, aanmeldingen sluiten door kwiz te starten |  X               | 
 | Kwizronde starten door 3 categorieën te kiezen, na ronde kwizavond eidigen, eindscores tonen |               |
 | Vraag selecteren, tonen aan team & op scorebord, antwoord insturen, vraag sluiten, antwoorden goedkeuren | X               |
 | Scorebord-app: ronde, vraagnummer, teams, scores (rondepunten & score voor ronde). Tijdens vraag: vraag, categorie, teamstatus. Na vraag: goede antwoord, Meestert oordelen, scores |                  |
-| Rondepunten worden als volgt verdiend: Na iedere ronde van 12 vragen, krijgt het team dat de meeste vragen goed had 4 ronde punten. Het team dat op één na het meeste vragen goed had krijgt 2 rondepunten, en het team dat op twee na het beste was krijgt nog 1 rondepunt. Alle andere teams krijgen 0.1 rondepunt voor de moeite en de gezelligheid. |                 |
+| Rondepunten worden als volgt verdiend: Na iedere ronde van 12 vragen, krijgt het team dat de meeste vragen goed had 4 ronde punten. Het team dat op één na het meeste vragen goed had krijgt 2 rondepunten, en het team dat op twee na het beste was krijgt nog 1 rondepunt. Alle andere teams krijgen 0.1 rondepunt voor de moeite en de gezelligheid. | X                |
 
 
 
@@ -25,12 +25,12 @@ Onderstaande punten zijn de criteria waar tijdens het assessment naar gekeken wo
 
 | criteria                                 | beoordeling[^1] |
 | ---------------------------------------- | --------------- |
-| Ondersteuning voor meerdere kwizzen tegelijk |                 |
+| Ondersteuning voor meerdere kwizzen tegelijk | X                 |
 | 1 server-proces, 3 SPA's                 | X                |
 | Gebruik React (routing, propTypes, etc.) | X                |
 | Gebruik WebSocket                        | X                |
-| Gebruik Mogoose modellen[^3]             |                 |
-| Gebruik DB voor meer dan alleen vragen[^3] |                 |
+| Gebruik Mogoose modellen[^3]             |  X               |
+| Gebruik DB voor meer dan alleen vragen[^3] |  X               |
 | Business rules (uniciteit, lege waardes etc)[^3] | X                 |
 | AJAX / Rest vs. Sockets[^3]              |  X              |
 | Sessies vs. Sockets[^3]                  |  X              |

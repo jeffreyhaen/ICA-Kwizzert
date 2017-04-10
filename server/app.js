@@ -270,6 +270,9 @@ function onStopRound(socket, data) {
             sortedPoints[index].team.points += 0.1;
         }
     }
+
+    let responseGameInformation = new ResponseGameInformation(game);
+    notifyClientsFor(game, responseGameInformation, [constants.SCOREBOARD_APP]);
 }
 
 /* Event handler for communication-protocol StartGame. */
@@ -278,6 +281,9 @@ function onStartGame(socket, data) {
     
     if (game !== undefined) {
         game.started = true;
+
+        let responseGameInformation = new ResponseGameInformation(game);
+        notifyClientsFor(game, responseGameInformation, [constants.SCOREBOARD_APP]);
     }
 }
 
@@ -287,6 +293,9 @@ function onStopGame(socket, data) {
     
     if (game !== undefined) {
         game.started = false;
+
+        let responseGameInformation = new ResponseGameInformation(game);
+        notifyClientsFor(game, responseGameInformation, [constants.SCOREBOARD_APP]);
     }
 
     // TODO: Save game to the database.

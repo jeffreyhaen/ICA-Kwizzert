@@ -241,7 +241,7 @@ function onStopRound(socket, data) {
         round.answeredQuestions.map((answeredQuestion) => {
             let answer = answeredQuestion.teamAnswers.filter((teamAnswer) => teamAnswer.team.name === team.name)[0];
             
-            if (answer.accepted === true) {
+            if (answer !== undefined && answer.accepted === true) {
                 teamPoints.correctAnswers++;
             }
         });
@@ -249,7 +249,19 @@ function onStopRound(socket, data) {
         points.push(teamPoints);
     });
 
-    console.log(points); // TODO: Add points to teams!
+    let sortedPoints = points.sort((a, b) => a.correctAnswers > b.correctAnswers).reverse(); // Descending
+
+    for (var index = 0; index < sortedPoints.length; index++) {
+        if (index === 0) {
+            sortedPoints[index].team.points += 4;
+        }
+        else if (index === 1) {
+            sortedPoints[index].team.points += 2;
+        }
+        else {
+            sortedPoints[index].team.points += 0.1;
+        }
+    }
 }
 
 /* Event handler for communication-protocol StartGame */

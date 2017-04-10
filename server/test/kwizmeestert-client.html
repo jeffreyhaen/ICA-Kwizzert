@@ -11,6 +11,10 @@
                 socket.emit('CreateGame', { name: 'test-game' });
             }
 
+            function registerToGame() {
+                socket.emit('RegisterToGame', { gameId: 'test-game' });
+            }
+
             function startGame() {
                 socket.emit('StartGame', { gameId: "test-game" });
             }
@@ -76,6 +80,7 @@
     <body>
         <h2>KwizMeestert-app</h2>      
         <button id="createGame" type="button" onclick="createGame()">createGame</button>
+        <button id="registerToGame" type="button" onclick="registerToGame()">registerToGame</button>
         <button id="rateTeamRegistration" type="button" onclick="rateTeamRegistration()">rateTeamRegistration</button>
         <button id="startGame" type="button" onclick="startGame()">startGame</button>
         <button id="chooseCategories" type="button" onclick="chooseCategories()">chooseCategories</button>

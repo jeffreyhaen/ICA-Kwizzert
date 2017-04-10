@@ -20,6 +20,7 @@ const { // Models...
 const { // Communication-protocol...
     CreateGame,
     RegisterClient,
+    RegisterToGame,
     RegisterTeam,
     RegisterTeamAnswer,
     RequestCategoryList,
@@ -56,6 +57,7 @@ mongo.connect(constants.MONGODB_CONNECTIONSTRING, function (err, database) {
 const events = [
     { type: new CreateGame().type, handler: onCreateGame },
     { type: new RegisterClient().type, handler: onRegisterClient },
+    { type: new RegisterToGame().type, handler: onRegisterToGame },
     { type: new RegisterTeam().type, handler: onRegisterTeam },
     { type: new RegisterTeamAnswer().type, handler: onRegisterTeamAnswer },
     { type: new RequestCategoryList().type, handler: onRequestCategoryList },
@@ -75,7 +77,7 @@ const events = [
 ];
 
 let games = [];     // See model Game. Example: { name: "Gametest 1", rounds: [], teams: [] }.
-let clients = [];   // See communication-protocol RegisterClient. Example: { socket: mySocket, clientType: myClientType }.
+let clients = [];   // See communication-protocol RegisterClient. Example: { socket: mySocket, clientType: myClientType, currentGame = myGame }.
 
 io.on('connection', (client) => { // TODO: Authorisation for every app on every socket event.
     events.forEach((event, index) => {
@@ -97,8 +99,17 @@ io.on('connection', (client) => { // TODO: Authorisation for every app on every 
 
 /* Event handler for communication-protocol RegisterClient. */
 function onRegisterClient(socket, data) {
-    let client = { socket: socket, clientType: data.clientType }
+    let client = { socket: socket, clientType: data.clientType, currentGame: null }
     clients.push(client);
+}
+
+function onRegisterToGame(socket, data) {
+    let game = games.find((item) => item.name === data.gameId);
+    let client = clients.find((item) => item.socket.id === socket.id);
+
+    if (client !== undefined && game !== undefined) {
+        client.currentGame = game;
+    }
 }
 
 
@@ -199,10 +210,7 @@ function onStartQuestion(socket, data) {
         round.currentQuestion = new PlayedQuestion(question, true);
 
         let responseRoundInformation = new ResponseRoundInformation(round);
-        let clientsToNotify = clients.filter((item) => item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
-        clientsToNotify.forEach((item, index) => {
-            item.socket.emit(responseRoundInformation.type, responseRoundInformation);
-        });
+        notifyClientsFor(game, responseRoundInformation, [constants.TEAM_APP, constants.SCOREBOARD_APP]);
     });
 }
 
@@ -215,10 +223,7 @@ function onStopQuestion(socket, data) {
     round.currentQuestion = null;
 
     let responseRoundInformation = new ResponseRoundInformation(round);
-    let clientsToNotify = clients.filter((item) => item.clientType === constants.KWIZMEESTERT_APP || item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
-    clientsToNotify.forEach((item, index) => {
-        item.socket.emit(responseRoundInformation.type, responseRoundInformation);
-    });
+    notifyClientsFor(game, responseRoundInformation, [constants.KWIZMEESTERT_APP, constants.TEAM_APP, constants.SCOREBOARD_APP]);
 }
 
 /* Event handler for communication-protocol CloseQuestion */
@@ -229,10 +234,7 @@ function onCloseQuestion(socket, data) {
     round.currentQuestion.open = false;
 
     let responseRoundInformation = new ResponseRoundInformation(round);
-    let clientsToNotify = clients.filter((item) => item.clientType === constants.KWIZMEESTERT_APP || item.clientType === constants.TEAM_APP ||  item.clientType === constants.SCOREBOARD_APP); // TODO: Filter on clients that are bound to the current game.
-    clientsToNotify.forEach((item, index) => {
-        item.socket.emit(responseRoundInformation.type, responseRoundInformation);
-    });
+    notifyClientsFor(game, responseRoundInformation, [constants.KWIZMEESTERT_APP, constants.TEAM_APP, constants.SCOREBOARD_APP]);
 }
 
 /* Event handler for communication-protocol StopRound */
@@ -286,6 +288,8 @@ function onStopGame(socket, data) {
     if (game !== undefined) {
         game.started = false;
     }
+
+    // TODO: Save game to the database.
 }
 
 
@@ -301,12 +305,10 @@ function onRegisterTeam(socket, data) {
         if (team.name !== undefined && game.teams.filter((item) => item.name === team.name).length === 0) {
             game.teams.push(team);
 
-            let responseGameInformation = new ResponseGameInformation(game);
-            let clientsToNotify = clients.filter((item) => item.clientType === constants.KWIZMEESTERT_APP); // TODO: Filter on clients that are bound to the current game.
+            onRegisterToGame(socket, new RegisterToGame(game.name));
 
-            clientsToNotify.forEach((item, index) => {
-                item.socket.emit(responseGameInformation.type, responseGameInformation);
-            });
+            let responseGameInformation = new ResponseGameInformation(game);
+            notifyClientsFor(game, responseGameInformation, [constants.KWIZMEESTERT_APP]);
         }
     }
 }
@@ -331,11 +333,7 @@ function onRegisterTeamAnswer(socket, data) {
             }
 
             let responseRoundInformation = new ResponseRoundInformation(round);
-            let clientsToNotify = clients.filter((item) => item.clientType === constants.KWIZMEESTERT_APP); // TODO: Filter on clients that are bound to the current game.
-
-            clientsToNotify.forEach((item, index) => {
-                item.socket.emit(responseRoundInformation.type, responseRoundInformation);
-            });
+            notifyClientsFor(game, responseRoundInformation, [constants.KWIZMEESTERT_APP]);
         }
     }
 }
@@ -347,4 +345,12 @@ function onRequestTeamInformation(socket, data) {
     let responseTeamInformation = new ResponseTeamInformation(team);
 
     socket.emit(responseTeamInformation.type, responseTeamInformation);
+}
+
+function notifyClientsFor(game, message, clientTypes) {
+    let clientsToNotify = clients.filter((item) => item.currentGame !== null && item.currentGame.name === game.name && clientTypes.find((type) => type === item.clientType) !== undefined);
+
+    clientsToNotify.forEach((item, index) => {
+        item.socket.emit(message.type, message);
+    });
 }

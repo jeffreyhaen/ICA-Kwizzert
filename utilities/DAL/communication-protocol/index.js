@@ -5,6 +5,7 @@ module.exports.StartQuestion = require('./startQuestion');
 module.exports.StopQuestion = require('./stopQuestion');
 module.exports.CloseQuestion = require('./closeQuestion');
 module.exports.RegisterClient = require('./registerClient');
+module.exports.RegisterToGame = require('./registerToGame');
 module.exports.RegisterTeam = require('./registerTeam');
 module.exports.RegisterTeamAnswer = require('./registerTeamAnswer');
 module.exports.RateTeamRegistration = require('./rateTeamRegistration');

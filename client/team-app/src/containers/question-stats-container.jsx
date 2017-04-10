@@ -15,13 +15,12 @@ class QuestionStatsContainer extends Component {
             <div>
                 <div className="panel panel-default">
                     <div className="panel-heading">
-                        <b><p>Statistieken van <i>{this.props.team}</i> in <i>{this.props.game}</i></p></b>
+                        <b><p>Statistieken van <i>{this.props.teamId}</i> in <i>{this.props.game}</i></p></b>
                     </div>
                     <div className="panel-body">
                         <p><b>Vraag:</b> {this.props.round.answeredQuestions.length + 1} / {constants.ROUND_QUESTION_AMOUNT}</p>
                         <p><b>Ronde:</b> {this.props.round.number}</p>
-                        <p><b>Punten:</b> -</p>
-                        <p><b>Positie:</b> -</p>
+                        <p><b>Punten:</b> {this.props.team.points}</p>
                     </div>
                 </div>
             </div>

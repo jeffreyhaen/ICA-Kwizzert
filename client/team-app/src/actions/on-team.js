@@ -4,3 +4,10 @@ export const onTeamNameSet = (teamId) => {
         payload: { teamId: teamId},
     }
 }
+
+export const onTeamReceived = (team) => {
+    return {
+        type: 'ON_TEAM_RECEIVED',
+        payload: { team: team },
+    }
+}

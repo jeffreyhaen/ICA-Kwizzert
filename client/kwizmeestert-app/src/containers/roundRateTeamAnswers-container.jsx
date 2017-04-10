@@ -61,7 +61,15 @@ class RoundRateTeamAnswers extends Component {
     render() {
         return (
             <div className="container">
-                <h2>Ronde: {this.props.round.number} / Vraag: {this.props.answeredQuestions.length+1} van de {constants.ROUND_QUESTION_AMOUNT}</h2>
+                <h2>Ronde: {this.props.round.number} / Vraag: {this.props.answeredQuestions.length + 1} van de {constants.ROUND_QUESTION_AMOUNT}</h2>
+
+                {
+                    (this.props.round.currentQuestion !== null) &&
+                        <div>
+                            <b>Vraag:</b> {this.props.round.currentQuestion.question.value}<br />
+                            <b>Antwoord:</b> {this.props.round.currentQuestion.question.answer}
+                        </div>
+                }
                 <table className="table table-striped">
                     <thead>
                         <tr>

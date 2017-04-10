@@ -4,25 +4,39 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
 import { onRoundInformationReceived } from '../actions/on-round';
+import { onTeamReceived } from '../actions/on-team';
 import QuestionStatsContainer from './question-stats-container';
 
-const { RegisterTeamAnswer, ResponseRoundInformation } = require('../../../../utilities/DAL/communication-protocol/');
+const { RegisterTeamAnswer, ResponseRoundInformation, RequestTeamInformation, ResponseTeamInformation } = require('../../../../utilities/DAL/communication-protocol/');
 
 class QuestionContainer extends Component {
     constructor(props) {
         super(props);
 
+        this.waitForTeamInformation();
         this.waitForRoundInformation();
     }
 
     waitForRoundInformation() {
         this.props.socket.on(new ResponseRoundInformation().type, (responseRoundInformation) => {
+
+            let requestTeamInformation = new RequestTeamInformation(this.props.game.name, this.props.teamId);
+            this.props.socket.emit(requestTeamInformation.type, requestTeamInformation);
+
             this.props.onRoundInformationReceived(responseRoundInformation.round);
+        });
+    }
+
+    waitForTeamInformation() {
+        this.props.socket.on(new ResponseTeamInformation().type, (responseTeamInformation) => {
+            console.log(responseTeamInformation);
+            this.props.onTeamReceived(responseTeamInformation.team);
         });
     }
 
     componentWillUnmount() {
         this.props.socket.off(new ResponseRoundInformation().type);
+        this.props.socket.off(new ResponseTeamInformation().type);
     }
 
     onTeamRegisterAnswer(value) {
@@ -34,10 +48,9 @@ class QuestionContainer extends Component {
     }
 
     render() {
-        console.log(this.props.round);
         return (
             <div className="container">
-                <QuestionStatsContainer round={this.props.round} team={this.props.teamId} game={this.props.game.name} />
+                <QuestionStatsContainer round={this.props.round} teamId={this.props.teamId} team={this.props.team} game={this.props.game.name} />
                 <div className="panel panel-default">
                     <div className="panel-heading">
                         <b><p>Vraag</p></b>
@@ -73,6 +86,7 @@ function matchDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             onRoundInformationReceived: onRoundInformationReceived,
+            onTeamReceived: onTeamReceived,
         }, dispatch);
 }
 
@@ -81,6 +95,8 @@ function mapStateToProps(state) {
         socket: state.socketStore.socket,
         game: state.gameStore.game,
         round: state.roundStore.round,
+        team: state.teamStore.team,
+
         teamId: state.teamStore.name,
     };
 }

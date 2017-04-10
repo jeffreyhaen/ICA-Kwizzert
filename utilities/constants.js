@@ -12,6 +12,7 @@ define('TEAM_APP', 'Team-app');
 
 define('MONGODB_CONNECTIONSTRING', 'mongodb://localhost/kwizzert');
 define('SERVER_PORT', 3001);
+define('SERVER_ADDRESS', 'http://localhost:' + this.SERVER_PORT);
 
 define('QUESTION_AMOUNT', 20);
 

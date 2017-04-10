@@ -4,12 +4,19 @@ import { connect } from 'react-redux';
 import { onGameDetailsReceived } from '../actions/on-game';
 import Switch from 'react-bootstrap-switch';
 
-const { RequestGameInformation, ResponseGameInformation, StartGame, StopGame, RateTeamRegistration } = require('../../../../utilities/DAL/communication-protocol/');
+const { RequestGameInformation, ResponseGameInformation, StartGame, StopGame, RateTeamRegistration, RegisterToGame } = require('../../../../utilities/DAL/communication-protocol/');
 
 class GameDetailContainer extends Component {
     constructor(props) {
         super(props);
+
+        this.registerToServer();
         this.reloadGame();
+    }
+
+    registerToServer() {
+        let registerToGame = new RegisterToGame(this.props.gameId);
+        this.props.socket.emit(registerToGame.type, registerToGame);
     }
 
     reloadGame() {

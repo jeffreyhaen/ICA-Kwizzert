@@ -5,7 +5,7 @@ import Switch from 'react-bootstrap-switch';
 import { onCategoriesReceived, onCategorySelect, onCategoryDeselect, onCategoryClear } from '../actions/on-category';
 import { onRoundInformationReceived } from '../actions/on-round';
 
-const { RequestCategoryList, ResponseCategoryList, ChooseCategories, ResponseRoundInformation } = require('../../../../utilities/DAL/communication-protocol/');
+const { RequestCategoryList, ResponseCategoryList, ChooseCategories, ResponseRoundInformation, StopGame } = require('../../../../utilities/DAL/communication-protocol/');
 const constants = require('../../../../utilities/constants.js')
 
 class GameChooseCategories extends Component {
@@ -57,6 +57,13 @@ class GameChooseCategories extends Component {
         }
     }
 
+    onGameStop() {
+        let stopGame = new StopGame(this.props.game.name);
+        this.props.socket.emit(stopGame.type, stopGame);
+
+        this.context.router.push('/games');
+    }
+
     render() {
         console.log(this.props.game);
         return (
@@ -84,10 +91,16 @@ class GameChooseCategories extends Component {
                             }
                     </tbody>
                 </table>
-                <input type="button" className="btn btn-primary pull-right" value="Start ronde" disabled={this.props.selectedCategories.length !== constants.CATEGORIES_AMOUNT} onClick={(e) => {
-                    e.preventDefault();
-                    this.onCategoriesSubmit();
-                }} />
+                <div className="pull-right">
+                    <input type="button" className="btn btn-primary" value="Beindig game" onClick={(e) => {
+                        e.preventDefault();
+                        this.onGameStop();
+                    }} />{" "}
+                    <input type="button" className="btn btn-primary pull-right" value="Start ronde" disabled={this.props.selectedCategories.length !== constants.CATEGORIES_AMOUNT} onClick={(e) => {
+                        e.preventDefault();
+                        this.onCategoriesSubmit();
+                    }} />
+                </div>
             </div>
         );
     }

@@ -12,8 +12,8 @@ class SocketContainer extends Component {
     constructor(props) {
         super(props);
 
-        let socket = io('http://localhost:3001/');
-        let registerClient = new RegisterClient(constants.KWIZMEESTERT_APP);
+        let socket = io(constants.SERVER_ADDRESS);
+        let registerClient = new RegisterClient(constants.SCOREBOARD_APP);
 
         socket.emit(registerClient.type, registerClient);
 

@@ -22,7 +22,7 @@ export default function (state = initialGameState, action) {
             break;
 
         case 'ON_GAME_DETAILS_RECEIVED':
-            
+
             return update(state, 
             {
                 game: { $set: action.payload.game },

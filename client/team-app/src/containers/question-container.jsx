@@ -29,7 +29,6 @@ class QuestionContainer extends Component {
 
     waitForTeamInformation() {
         this.props.socket.on(new ResponseTeamInformation().type, (responseTeamInformation) => {
-            console.log(responseTeamInformation);
             this.props.onTeamReceived(responseTeamInformation.team);
         });
     }

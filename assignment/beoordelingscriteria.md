@@ -53,8 +53,8 @@ Onderstaande punten zijn de criteria waar tijdens het assessment naar gekeken wo
 | criteria                                 | beoordeling[^2] |
 | ---------------------------------------- | --------------- |
 | Vormgeving                               |                 |
-| Promises                                 |                 |
-| Redux                                    |                 |
+| Promises                                 | X                |
+| Redux                                    | X                 |
 | Gesuggereerde extra's:  selfie, Cordova, badges, timer |                 |
 | Deployed op server (Heroku oid)          |                 |
 | Overig                                   |                 |

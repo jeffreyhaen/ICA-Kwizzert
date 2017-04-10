@@ -35,6 +35,14 @@
                 socket.emit('StopQuestion', { gameId: "test-game", roundId: 1 });
             }
 
+            function stopRound() {
+                socket.emit('StopRound', { gameId: "test-game", roundId: 1 });
+            }
+
+            function stopGame() {
+                socket.emit('StopGame', { gameId: "test-game" });
+            }
+
             function requestCategoryList() {
                 socket.emit('RequestCategoryList', { });
             }
@@ -87,6 +95,8 @@
         <button id="startQuestion" type="button" onclick="startQuestion()">startQuestion</button>
         <button id="closeQuestion" type="button" onclick="closeQuestion()">closeQuestion</button>
         <button id="stopQuestion" type="button" onclick="stopQuestion()">stopQuestion</button>
+        <button id="stopRound" type="button" onclick="stopRound()">stopRound</button>
+        <button id="stopGame" type="button" onclick="stopGame()">stopGame</button>
 
         <p>Requests:</p>
         <button id="requestGameList" type="button" onclick="requestGameList()">requestGameList</button>

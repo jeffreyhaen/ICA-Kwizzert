@@ -294,11 +294,11 @@ function onStopGame(socket, data) {
     if (game !== undefined) {
         game.started = false;
 
+        db.collection('games').insert(game); // Save game to the database for history.
+
         let responseGameInformation = new ResponseGameInformation(game);
         notifyClientsFor(game, responseGameInformation, [constants.SCOREBOARD_APP]);
     }
-
-    // TODO: Save game to the database.
 }
 
 

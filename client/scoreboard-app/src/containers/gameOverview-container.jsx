@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { onGameReceiveList, onGameDetailsReceived } from '../actions/on-game';
 
-const { RequestGameList, ResponseGameList } = require('../../../../utilities/DAL/communication-protocol/');
+const { RequestGameList, ResponseGameList, RegisterToGame } = require('../../../../utilities/DAL/communication-protocol/');
 
 class GameOverviewContainer extends Component {
     constructor(props) {
@@ -28,7 +28,10 @@ class GameOverviewContainer extends Component {
             return game.name === gameId
         }));
 
-        this.context.router.push('/register');
+        let registerToGame = new RegisterToGame(gameId);
+        this.props.socket.emit(registerToGame.type, registerToGame);
+
+        this.context.router.push('/scoreboard');
     }
 
     render() {

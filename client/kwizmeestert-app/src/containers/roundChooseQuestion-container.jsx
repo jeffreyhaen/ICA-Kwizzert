@@ -93,7 +93,7 @@ class RoundChooseQuestions extends Component {
                     <input type="button" className="btn btn-primary" value="Start vraag" disabled={this.props.selectedQuestion === null} onClick={ () => {
                         this.onQuestionSubmit();
                     }} />{" "}
-                    <input type="button" className="btn btn-primary" value="Sluit ronde" onClick={ () => {
+                    <input type="button" className="btn btn-danger" value="Sluit ronde" onClick={ () => {
                         this.onRoundStop();
                     }} />
                 </div>

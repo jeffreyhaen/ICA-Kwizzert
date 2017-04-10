@@ -62,15 +62,6 @@ class GameDetailContainer extends Component {
     render() {
         return (
             <div className="container">
-                <div className="pull-right">
-                    <input type="button" className="btn btn-primary" value="Start" disabled={this.props.game.started} onClick={(e) => {
-                        this.onGameStart(e);
-                    }} />
-                    {" "}
-                    <input type="button" className="btn btn-primary" value="Stop" disabled={!this.props.game.started} onClick={(e) => {
-                        this.onGameStop(e);
-                    }} />
-                </div>
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -93,6 +84,15 @@ class GameDetailContainer extends Component {
                             })}
                     </tbody>
                 </table>
+                 <div className="pull-right">
+                    <input type="button" className="btn btn-primary" value="Start" disabled={this.props.game.started} onClick={(e) => {
+                        this.onGameStart(e);
+                    }} />
+                    {" "}
+                    <input type="button" className="btn btn-danger" value="Stop" disabled={!this.props.game.started} onClick={(e) => {
+                        this.onGameStop(e);
+                    }} />
+                </div>
             </div>
         );
     }

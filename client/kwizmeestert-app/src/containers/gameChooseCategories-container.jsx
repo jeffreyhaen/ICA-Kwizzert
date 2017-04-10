@@ -92,11 +92,11 @@ class GameChooseCategories extends Component {
                     </tbody>
                 </table>
                 <div className="pull-right">
-                    <input type="button" className="btn btn-primary" value="Beindig game" onClick={(e) => {
+                    <input type="button" className="btn btn-danger" value="Beëindig game" onClick={(e) => {
                         e.preventDefault();
                         this.onGameStop();
                     }} />{" "}
-                    <input type="button" className="btn btn-primary pull-right" value="Start ronde" disabled={this.props.selectedCategories.length !== constants.CATEGORIES_AMOUNT} onClick={(e) => {
+                    <input type="button" className="btn btn-primary" value="Start ronde" disabled={this.props.selectedCategories.length !== constants.CATEGORIES_AMOUNT} onClick={(e) => {
                         e.preventDefault();
                         this.onCategoriesSubmit();
                     }} />

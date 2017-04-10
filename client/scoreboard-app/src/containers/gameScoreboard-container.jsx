@@ -18,14 +18,12 @@ class GameScoreboardContainer extends Component {
 
     reloadGameInformation() {
         this.props.socket.on(new ResponseGameInformation().type, (responseGameInformation) => {
-            console.log(responseGameInformation);
             this.props.onGameDetailsReceived(responseGameInformation.game);
         });
     }
 
     reloadRoundInformation() {
         this.props.socket.on(new ResponseRoundInformation().type, (responseRoundInformation) => {
-            console.log(responseRoundInformation);
             this.props.onRoundDetailsReceived(responseRoundInformation.round);
         });
     }
@@ -40,7 +38,7 @@ class GameScoreboardContainer extends Component {
             <div className="container">
                  <div className="panel panel-default">
                     <div className="panel-body" style={{textAlign: 'center'}}>
-                        <h4>Ronde: {this.props.round.number} van de {constants.ROUND_QUESTION_AMOUNT}</h4>
+                        <h4>Ronde: {this.props.round.number} / Vraag: {this.props.round.answeredQuestions.length + 1} van de {constants.ROUND_QUESTION_AMOUNT}</h4>
                     </div>
                 </div>
 
@@ -53,9 +51,9 @@ class GameScoreboardContainer extends Component {
                             <div className="panel-body">
                                 <ul>
                                     {
-                                        this.props.game.teams.map((team, index) => {
+                                        this.props.game.teams.filter((team) => team.accepted).map((team, index) => {
                                             return (
-                                                <li key={index}><b>{team.name}</b>: {team.points}</li>
+                                                <li key={index}><h4><b>{team.name}</b>: {team.points}</h4></li>
                                             )
                                         })
                                     }
@@ -67,13 +65,10 @@ class GameScoreboardContainer extends Component {
                      <div className="panel panel-default">
                         <div className="panel-heading" style={{textAlign: 'center'}}>
                             <b>
+                                Categorie
                                 {
                                     (this.props.round.currentQuestion !== null) &&
-                                        this.props.round.currentQuestion.question.category.name
-                                }
-                                {
-                                    (this.props.round.currentQuestion === null) &&
-                                        "Categorie"
+                                        ': ' + this.props.round.currentQuestion.question.category.name
                                 }
                             </b>
                         </div>
@@ -84,11 +79,11 @@ class GameScoreboardContainer extends Component {
                         }
                         {
                             (this.props.round.currentQuestion !== null && this.props.round.currentQuestion.open) &&
-                            <h3>{this.props.round.currentQuestion.question.value}</h3>
+                            <h3>Vraag: <b>{this.props.round.currentQuestion.question.value}</b></h3>
                         }
                         {
                             (this.props.round.currentQuestion !== null && !this.props.round.currentQuestion.open) &&
-                            <h3>{this.props.round.currentQuestion.question.answer}</h3>
+                            <h3>Antwoord: <b>{this.props.round.currentQuestion.question.answer}</b></h3>
                         }
                         </div>
                         </div>

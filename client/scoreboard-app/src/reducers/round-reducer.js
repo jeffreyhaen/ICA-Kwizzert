@@ -2,6 +2,7 @@ const initialRoundState = {
    round: {
        currentQuestion: null,
        number: 1,
+       answeredQuestions: [],
    }
 };
 

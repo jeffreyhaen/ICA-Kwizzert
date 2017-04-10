@@ -38,7 +38,7 @@ class GameOverviewContainer extends Component {
                     <thead>
                         <tr>
                             <th>Game</th>
-                            <th>Registreer</th>
+                            <th>Kies</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,7 +47,7 @@ class GameOverviewContainer extends Component {
                                 return (
                                     <tr key={index}>
                                         <td>{game.name}</td>
-                                        <td><input type="button" className="btn btn-primary" value="Kies" onClick={() => {
+                                        <td><input type="button" className="btn btn-primary" value="Kies" disabled={game.started} onClick={() => {
                                             this.onGameChoose(game.name);
                                         }} /></td>
                                     </tr>

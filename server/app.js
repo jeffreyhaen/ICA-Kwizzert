@@ -30,6 +30,8 @@ const { // Communication-protocol...
     ResponseGameInformation,
     RequestRoundInformation,
     ResponseRoundInformation,
+    RequestTeamInformation,
+    ResponseTeamInformation,
     ResponseTeamAnswer,
     RateTeamAnswer,
     RateTeamRegistration,
@@ -59,6 +61,7 @@ const events = [
     { type: new RequestGameList().type, handler: onRequestGameList },
     { type: new RequestGameInformation().type, handler: onRequestGameInformation },
     { type: new RequestRoundInformation().type, handler: onRequestRoundInformation },
+    { type: new RequestTeamInformation().type, handler: onRequestTeamInformation },
     { type: new RateTeamAnswer().type, handler: onRateTeamAnswer },
     { type: new RateTeamRegistration().type, handler: onRateTeamRegistration },
     { type: new ChooseCategories().type, handler: onChooseCategories },
@@ -325,4 +328,13 @@ function onRegisterTeamAnswer(socket, data) {
             });
         }
     }
+}
+
+/* Event handler for communication-protocol RequestTeamInformation */
+function onRequestTeamInformation(socket, data) {
+    let game = games.find((item) => item.name === data.gameId);
+    let team = game.teams.find((item) => item.name === data.teamId);
+    let responseTeamInformation = new ResponseTeamInformation(team);
+
+    socket.emit(responseTeamInformation.type, responseTeamInformation);
 }

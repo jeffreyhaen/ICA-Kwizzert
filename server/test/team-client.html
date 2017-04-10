@@ -15,11 +15,20 @@
                 socket.emit('RegisterTeamAnswer', { gameId: 'test-game', roundId: 1, teamId: 'test-team', questionId: 'test-question-1', value: 'test-answer-1' });
             }
 
+            function requestTeamInformation() {
+                socket.emit('RequestTeamInformation', { gameId: "test-game", teamId: "test-team" });
+            }
+
+            socket.on('ResponseTeamInformation', function(data) {
+                console.log(data);
+            });
+
         </script>
     </head>
     <body>
         <h2>Team-app</h2>   
         <button id="registerTeam" type="button" onclick="registerTeam()">registerTeam</button>
         <button id="registerTeamAnswer" type="button" onclick="registerTeamAnswer()">registerTeamAnswer</button>
+        <button id="requestTeamInformation" type="button" onclick="requestTeamInformation()">requestTeamInformation</button>
     </body>
 </html>

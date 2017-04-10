@@ -36,11 +36,12 @@ const { // Communication-protocol...
     RateTeamAnswer,
     RateTeamRegistration,
     ChooseCategories,
+    StartGame,
+    StopGame,
+    StopRound,
     StartQuestion,
     StopQuestion,
     CloseQuestion,
-    StartGame,
-    StopGame,
 } = require('../utilities/DAL/communication-protocol/');
 
 let db;
@@ -67,6 +68,7 @@ const events = [
     { type: new ChooseCategories().type, handler: onChooseCategories },
     { type: new StartGame().type, handler: onStartGame },
     { type: new StopGame().type, handler: onStopGame },
+    { type: new StopRound().type, handler: onStopRound },
     { type: new StartQuestion().type, handler: onStartQuestion },
     { type: new StopQuestion().type, handler: onStopQuestion },
     { type: new CloseQuestion().type, handler: onCloseQuestion },

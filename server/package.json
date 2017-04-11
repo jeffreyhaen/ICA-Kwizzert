@@ -6,7 +6,7 @@
   "author": "Jeffrey Haen & Jevgeni Geurtsen",
   "license": "ISC",
   "scripts": {
-    "test": "node_modules/.bin/mocha -w"
+    "test": "node_modules/.bin/mocha --watch"
   },
   "dependencies": {
     "express": "^4.15.2",

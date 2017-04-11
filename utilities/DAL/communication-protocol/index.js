@@ -25,3 +25,5 @@ module.exports.StartGame = require('./startGame');
 module.exports.StopGame = require('./stopGame');
 module.exports.StartRound = require('./startRound');
 module.exports.StopRound = require('./stopRound');
+module.exports.RequestGameHistory = require('./requestGameHistory');
+module.exports.ResponseGameHistory = require('./responseGameHistory');

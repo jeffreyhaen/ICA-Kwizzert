@@ -8,6 +8,7 @@ import kwizmeestertStore from './stores/kwizmeestertStore';
 import GameOverviewContainer from './containers/game/overview-container';
 import GameDetailContainer from './containers/game/detail-container';
 import GameChooseCategories from './containers/game/chooseCategories-container';
+import GameHistoryContainer from './containers/game/history-container';
 import RoundChooseQuestion from './containers/round/chooseQuestion-container';
 import RoundRateTeamAnswers from './containers/round/rateTeamAnswers-container';
 
@@ -19,6 +20,7 @@ ReactDOM.render(
        <Router history={browserHistory}>
             <Route path="/" component={App}>
                 <IndexRoute component={GameOverviewContainer} />
+                <Route path="/history_games" component={GameHistoryContainer} />
                 <Route path="/games" component={GameOverviewContainer} />
                 <Route path="/game/:gameId" component={GameDetailContainer} />
                 <Route path="/chooseCategories" component={GameChooseCategories} />

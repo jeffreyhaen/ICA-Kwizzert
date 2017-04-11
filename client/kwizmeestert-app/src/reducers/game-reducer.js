@@ -6,6 +6,9 @@ const initialGameState = {
        started: false,
        name: "",
    },
+
+   gameHistoryList: [],
+   selectedHistoricGameId: null,
 };
 
 import update from 'immutability-helper';
@@ -27,6 +30,20 @@ export default function (state = initialGameState, action) {
             {
                 game: { $set: action.payload.game },
             });
+
+        case 'ON_GAME_HISTORY_RECEIVED':
+
+            return update(state,
+            {
+                gameHistoryList: { $set: action.payload.gameHistoryList },
+            });
+
+        case 'ON_GAME_HISTORY_ENTRY_SELECT':
+
+            return update(state,
+            {
+                selectedHistoricGameId: { $set: action.payload.gameId },
+            })
     }
     
     return state;

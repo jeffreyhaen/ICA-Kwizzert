@@ -43,6 +43,8 @@ const { // Communication-protocol...
     StartQuestion,
     StopQuestion,
     CloseQuestion,
+    RequestGameHistory,
+    ResponseGameHistory,
 } = require('../utilities/DAL/communication-protocol/');
 
 let db;
@@ -65,6 +67,7 @@ const events = [
     { type: new RequestGameInformation().type, handler: onRequestGameInformation },
     { type: new RequestRoundInformation().type, handler: onRequestRoundInformation },
     { type: new RequestTeamInformation().type, handler: onRequestTeamInformation },
+    { type: new RequestGameHistory().type, handler: onRequestGameHistory },
     { type: new RateTeamAnswer().type, handler: onRateTeamAnswer },
     { type: new RateTeamRegistration().type, handler: onRateTeamRegistration },
     { type: new ChooseCategories().type, handler: onChooseCategories },
@@ -330,6 +333,14 @@ function onStopGame(socket, data) {
         let responseGameInformation = new ResponseGameInformation(game);
         notifyClientsFor(game, responseGameInformation, [constants.SCOREBOARD_APP]);
     }
+}
+
+function onRequestGameHistory(socket) {
+    db.collection('games').find({}).toArray((err, games) => {
+        let responseGameHistory = new ResponseGameHistory(games);
+
+        socket.emit(responseGameHistory.type, responseGameHistory);
+    });
 }
 
 

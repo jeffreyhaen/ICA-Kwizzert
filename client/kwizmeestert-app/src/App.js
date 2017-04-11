@@ -14,6 +14,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>KwizMeestert</h2>
           <Link to={"/games"}>Alle games</Link>{" | "} 
+          <Link to={"/history_games"}>Geschiedenis games</Link>
         </div>
         <div>
             <br />

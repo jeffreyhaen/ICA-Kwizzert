@@ -16,5 +16,9 @@ define('SERVER_ADDRESS', 'http://localhost:' + this.SERVER_PORT);
 
 define('QUESTION_AMOUNT', 20);
 
-define('ROUND_QUESTION_AMOUNT', 2); // 12
+define('ROUND_QUESTION_AMOUNT', 12);
 define('CATEGORIES_AMOUNT', 3);
+
+define('POINTS_BEST', 4);
+define('POINTS_SEMIBEST', 2);
+define('POINTS_REST', 0.1);

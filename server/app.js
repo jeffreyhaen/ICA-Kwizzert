@@ -115,6 +115,7 @@ function onRegisterClient(socket, data) {
     clients.push(client);
 }
 
+/* Event handler for communication-protocol RegisterToGame. */
 function onRegisterToGame(socket, data) {
     let game = games.find((item) => item.name === data.gameId);
     let client = clients.find((item) => item.socket.id === socket.id);
@@ -287,13 +288,13 @@ function onStopRound(socket, data) {
 
     for (var index = 0; index < sortedPoints.length; index++) {
         if (index === 0) {
-            sortedPoints[index].team.points += 4;
+            sortedPoints[index].team.points += constants.POINTS_BEST;
         }
         else if (index === 1) {
-            sortedPoints[index].team.points += 2;
+            sortedPoints[index].team.points += constants.POINTS_SEMIBEST;
         }
         else {
-            sortedPoints[index].team.points += 0.1;
+            sortedPoints[index].team.points += constants.POINTS_REST;
         }
     }
 

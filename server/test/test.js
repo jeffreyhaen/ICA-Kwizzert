@@ -36,7 +36,7 @@ function createSocket() {
 
 describe("Testing Kwizzert web socket server!", function () {
     this.timeout(10000);
-    const timeoutPerTest = 2000;
+    const timeoutPerTest = 3000;
 
     const gameName = 'test-game';
     const teamName = 'test-team';
@@ -327,7 +327,7 @@ describe("Testing Kwizzert web socket server!", function () {
                 should.exist(data);
                 should.exist(data.game);
 
-                data.game.teams.find((team) => team.name === teamName).points.should.equal(4);
+                data.game.teams[0].points.should.equal(constants.POINTS_BEST);
                 
                 socketKwizMeestertApp.disconnect();
                 socketScoreboardApp.disconnect();
@@ -341,22 +341,3 @@ describe("Testing Kwizzert web socket server!", function () {
         }, timeoutPerTest);
     });
 });
-
-//    it(' should succeed', function (done) {
-//         setTimeout(function () {
-//             let socket = createSocket();
-//             let registerClient = new RegisterClient(constants.KWIZMEESTERT_APP);
-//             let  = new ();
-
-//             socket.on(new ().type, function (data) {
-//                 should.exist(data);
-
-//                 socket.disconnect();
-//                 done();
-//             });
-
-//             socket.emit(registerClient.type, registerClient);
-//             socket.emit(.type, );
-//             socket.emit(.type, );
-//         }, timeoutPerTest);
-//     });
